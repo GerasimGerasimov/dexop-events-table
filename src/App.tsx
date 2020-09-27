@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import EventsTable from './components/table/EventsTable';
 
 function App() {
   return (
     <div className="App">
-      <h1>Table of Events</h1>
+      <EventsTable/>
     </div>
   );
 }
