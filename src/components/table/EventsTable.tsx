@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './EventsTable.css'
 
 interface IEventItemDetails {
   type: string;
@@ -30,7 +31,7 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
     return (
       <div>
         <h1>Table of Events</h1>
-        <table>
+        <table className='w100p grid'>
           <tbody>
             {
               this.props.items.map((item, index)=>{
@@ -38,9 +39,12 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                 const {type, initialValue, comment, todo} = {... details}
                 return (
                   <tr key={index}>
-                    <td>{type}</td>
+                    <td className='mw'>
+                      <div className='circle'
+                      ></div>
+                    </td>
                     <td align="left">{tag}</td>
-                    <td>{datetime}</td>
+                    <td >{datetime}</td>
                     <td align="left">{comment}</td>
                   </tr>
                 )
