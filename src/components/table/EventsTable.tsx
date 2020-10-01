@@ -1,18 +1,6 @@
 import React, { Component } from "react";
+import { IEventItem } from "../../server/ieventsdata";
 import './EventsTable.css'
-
-interface IEventItemDetails {
-  type: string;
-  initialValue: string,
-  comment: string,
-  todo: string;
-}
-
-export interface IEventItem {
-  datetime: string;
-  tag: string;
-  details: IEventItemDetails;
-}
 
 interface IEventTableProps {
   items: Array<IEventItem>;
