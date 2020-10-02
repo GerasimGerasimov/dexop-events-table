@@ -9,6 +9,18 @@
   /*font-size: calc(0.1rem + 2vw); /* 5px is first minimal base size. and 3% of viewport width */
 }
 
+.vscroll-wrapper {
+  overflow: auto;
+}
+
+.vscroll-table {
+  overflow: auto;
+  vertical-align: top;
+	max-width: 100%;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
 thead,
 tbody,
 tr {

@@ -17,9 +17,8 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
 
   render () {
     return (
-      <div>
-        <h1>Table of Events</h1>
-        <table className='w100p grid'>
+      <div className='vscroll-wrapper'>
+        <table className='w100p grid vscroll-table'>
           <tbody>
             {
               this.props.items.map((item, index)=>{

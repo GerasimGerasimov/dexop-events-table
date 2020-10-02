@@ -4,8 +4,12 @@ import { EventsModel } from './server/server';
 
 function App() {
   return (
-    <div>
-      <EventsTable items={EventsModel.Items}/>
+    <div className="flex-column">
+      <button>Search</button>
+      <div className = 'flex-all-client'>
+        <EventsTable items={EventsModel.Items}/>
+      </div>
+      <button>Prev-Next</button>
     </div>
   );
 }
