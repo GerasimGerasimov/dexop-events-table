@@ -1,6 +1,6 @@
 .grid {
   display: grid;
-  grid-template-columns: 16px minmax(50px, 1fr) minmax(250px, 2fr) minmax(150px, 2fr);
+  grid-template-columns: 64px minmax(50px, 1fr) minmax(250px, 2fr) minmax(150px, 2fr);
 }
 
 .w100p {

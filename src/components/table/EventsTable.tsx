@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IEventItem } from "../../server/ieventsdata";
+import { IEventItem} from "../../server/ieventsdata";
 import './EventsTable.css'
 
 interface IEventTableProps {
@@ -26,10 +26,7 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                 const {type, initialValue, comment, todo} = {... details}
                 return (
                   <tr key={index}>
-                    <td className='mw'>
-                      <div className='circle'
-                      ></div>
-                    </td>
+                    <td >{type}</td>
                     <td align="left">{tag}</td>
                     <td >{datetime}</td>
                     <td align="left">{comment}</td>
@@ -43,22 +40,3 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
     )
   }
 }
-/*
-<table>
-  <tbody>
-  {
-    this.Items.map((item, index) => {
-      const  {color, tag, value, msu} = item
-        return (
-          <tr key={index}>
-            <td><ColorMark color={color}/></td>
-            <td>{tag}</td>
-            <td align="left">{value}</td>
-            <td >{msu}</td>
-          </tr>
-          )}
-        )
-    }
-  </tbody>
-</table>
-*/

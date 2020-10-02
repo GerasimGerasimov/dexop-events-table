@@ -47,11 +47,11 @@ export class TEventsModel {
     return client.ID
   }
 
-  private defaultEventRespind(): IEventsRespond {
+  private defaultEventRespond(): IEventsRespond {
     return {
       ClientID: '', //уникальный ID клиента
       DateTime: new Date().toISOString(), //время отправки данных сервером
-      TotalItemsQuantity: 0,
+      TotalItemsQuantity: this.Items.length,
       ItemsBefore: 0,
       ItemsAfter: 0,
       ItemsInRespond: 0,
@@ -59,12 +59,17 @@ export class TEventsModel {
         SortBy: IEventSortItem.Time,
         Direction: IEventSortDirection.Down
       },
-      Items: {}
+      Items: []
     }
   }
 
   public getItems(query: IEventsQuery): IEventsRespond {
-    const result: IEventsRespond = this.defaultEventRespind();
+    const result: IEventsRespond = this.defaultEventRespond();
+    const ItemsArray: Array<IEventItem> = this.Items.slice(query.FromIndex, query.FromIndex+query.QueriedQuantity);
+    result.Items = ItemsArray;
+    result.ItemsBefore = query.FromIndex;
+    result.ItemsAfter = result.TotalItemsQuantity - (query.FromIndex + ItemsArray.length) ;
+    result.ItemsInRespond = ItemsArray.length;
     return result;
   }
 }

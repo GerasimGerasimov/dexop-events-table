@@ -32,10 +32,11 @@ export enum IEventQueryDirection {
 }
 
 export interface IEventsQuery {
-  ClientID: string; //уникальный ID клиента
-  SortMode: IEventsSortMode;//как сортировать данные для этого клиента
+  ClientID?: string; //уникальный ID клиента
+  SortMode?: IEventsSortMode;//как сортировать данные для этого клиента
+  FromIndex: number;
   QueriedQuantity: number;
-  Direction: IEventQueryDirection;
+  Direction?: IEventQueryDirection;
 }
 
 export interface IEventsRespond {
@@ -46,5 +47,5 @@ export interface IEventsRespond {
   ItemsAfter: number;
   ItemsInRespond: number;
   SortMode: IEventsSortMode;//как были отсортировваны данные
-  Items: any;
+  Items: Array<IEventItem>;
 }
