@@ -17,24 +17,32 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
 
   render () {
     return (
-      <div className='vscroll-wrapper'>
-        <table className='w100p grid vscroll-table'>
-          <tbody>
-            {
-              this.props.items.map((item, index)=>{
-                const {tag, datetime, details} = {... item};
-                const {type, initialValue, comment, todo} = {... details}
-                return (
-                  <tr key={index}>
-                    <td >{type}</td>
-                    <td align="left">{tag}</td>
-                    <td >{datetime}</td>
-                    <td align="left">{comment}</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
+      <div className='wrapper'>
+        <table className=''>
+          <thead>
+            <tr>
+                <th>Type</th>
+                <th>Tag</th>
+                <th>Date/Time</th>
+                <th>Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+              {
+                this.props.items.map((item, index)=>{
+                  const {tag, datetime, details} = {... item};
+                  const {type, initialValue, comment, todo} = {... details}
+                  return (
+                    <tr key={index}>
+                      <td >{type}</td>
+                      <td align="left">{tag}</td>
+                      <td >{datetime}</td>
+                      <td align="left">{comment}</td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
         </table>
       </div>
     )

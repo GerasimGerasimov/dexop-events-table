@@ -6,4 +6,9 @@
 
 .flex-all-client {
   flex-grow: 3;
+  overflow: hidden;
+}
+
+.b1pxdgr {
+  border: 1px dashed green;
 }

@@ -1,47 +1,14 @@
-.grid {
-  display: grid;
-  grid-template-columns: 64px minmax(50px, 1fr) minmax(250px, 2fr) minmax(150px, 2fr);
-}
-
-.w100p {
+.wrapper {
+  height: 100%;
   width: 100%;
-  border: 1px dashed red;
-  /*font-size: calc(0.1rem + 2vw); /* 5px is first minimal base size. and 3% of viewport width */
-}
-
-.vscroll-wrapper {
+  margin: auto;
   overflow: auto;
 }
-
-.vscroll-table {
-  overflow: auto;
-  vertical-align: top;
-	max-width: 100%;
-	overflow-x: auto;
-	white-space: nowrap;
+table {
+  border-collapse: collapse;
+  width: 100%;
 }
-
-thead,
-tbody,
-tr {
-  display: contents;
-}
-
-.mw{
-  box-sizing: border-box;
-  overflow: hidden;
-  border: 1px dashed rgb(68, 46, 194);
-  display: flex;
-  /*align-items: center;*/
-  justify-content: center;
-}
-
-.circle {
-  min-width: 16px;
-  min-height: 16px;
-  max-width: 16px;
-  max-height: 16px;
-  background-color: brown;
-  border: 2px solid black;
-  border-radius: 16px;
+thead th {
+  position: sticky;
+  top: 0;
 }

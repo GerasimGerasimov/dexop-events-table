@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import EventsTable from './components/table/EventsTable';
-import { IEventItem, IEventQueryDirection, IEventsQuery, IEventsRespond } from './server/ieventsdata';
+import { IEventQueryDirection, IEventsQuery, IEventsRespond } from './server/ieventsdata';
 import { EventsModel } from './server/server';
+import './App.css'
 
 interface IAppProps{
 }
 
 interface IAppState{
   query: IEventsQuery;
-  Items: Array<IEventItem>;
+  respond: IEventsRespond;
 }
 
 
@@ -23,51 +24,66 @@ export default class App extends Component<IAppProps,IAppState> {
         FromIndex:0,
         QueriedQuantity: 10
       },
-      Items:[]
+      respond: {
+        ClientID: '',
+        DateTime: '',
+        TotalItemsQuantity: 0,
+        ItemsBefore: 0,
+        ItemsAfter: 0,
+        ItemsInRespond: 0,
+        Items: []
+      }
     }
+  }
+
+  private getNextIndex(direction: IEventQueryDirection): number {
+    let nextIndex: number = this.state.query.FromIndex;
+    switch (direction) {
+      case IEventQueryDirection.Next:
+        nextIndex  += ItemsOnPage;
+        const max: number = (this.state.respond.TotalItemsQuantity === 0)
+                            ? 0
+                            : this.state.respond.TotalItemsQuantity - 1;
+        nextIndex = (nextIndex > max)? max : nextIndex;
+        break;
+      case IEventQueryDirection.Prev:
+        nextIndex  -= ItemsOnPage;
+        nextIndex = (nextIndex < 0)? 0 : nextIndex;
+        break;
+    }
+    return nextIndex;
   }
 
   private nextItems(direction: IEventQueryDirection) {
-    let NextFromIndex: number = this.state.query.FromIndex;
-    switch (direction) {
-      case IEventQueryDirection.Next:
-        NextFromIndex  += ItemsOnPage;
-        break;
-      case IEventQueryDirection.Prev:
-        NextFromIndex  -= ItemsOnPage;
-        NextFromIndex = (NextFromIndex < 0)? 0 : NextFromIndex;
-        break;
-    }
-    
     this.setState((state)=>({
       query:{
-        FromIndex: NextFromIndex,
+        FromIndex: this.getNextIndex(direction),
         QueriedQuantity: state.query.QueriedQuantity
       }
-    }), ()=>this.getRespond())
-    console.log(NextFromIndex + this.state.query.QueriedQuantity);
-
+    }), ()=>this.getData())
   }
 
   componentDidMount(){
-    this.getRespond()
+    this.getData()
   }
 
-  getRespond(){
+  getData(){
     const respond:IEventsRespond = EventsModel.getItems(this.state.query);
-    this.setState({Items: respond.Items})
+    this.setState({respond})
   }
 
   render() {
     return (
       <div className='flex-column'>
-        <div><button>Search</button></div>
-        <div className='flex-all-client'>
-          <EventsTable items = {this.state.Items}/>
+        <div className='b1pxdgr'><button>Search</button></div>
+        <div className='flex-all-client b1pxdgr'>
+          <EventsTable items = {this.state.respond.Items}/>
         </div>
-        <div>
+        <div className='b1pxdgr'>
+          <span>{this.state.respond.ItemsBefore}</span>
           <button onClick={()=>this.nextItems(IEventQueryDirection.Prev)}>Pred</button>
           <button onClick={()=>this.nextItems(IEventQueryDirection.Next)}>Next</button>
+          <span>{this.state.respond.ItemsAfter}</span>
         </div>
       </div>
     );
