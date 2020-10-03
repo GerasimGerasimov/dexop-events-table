@@ -1,13 +1,14 @@
 .wrapper {
   height: 100%;
   width: 100%;
-  margin: auto;
   overflow: auto;
 }
 table {
   border-collapse: collapse;
   width: 100%;
+  white-space: nowrap;
 }
+
 thead th {
   position: sticky;
   top: 0;
