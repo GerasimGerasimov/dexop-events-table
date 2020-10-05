@@ -1,15 +1,39 @@
-.wrapper {
+.events-wrapper {
   height: 100%;
   width: 100%;
   overflow: auto;
 }
-table {
+
+.events {
   border-collapse: collapse;
   width: 100%;
   white-space: nowrap;
 }
 
-thead th {
+table.events { font-size: 100%};
+
+@media (max-width: 320px) { table.events {font-size:0.5em;} }
+@media (min-width: 320px) { table.events {font-size:0.7em;} }
+@media (min-width: 640px) { table.events {font-size:0.9em;} } 
+@media (min-width:960px) { table.events {font-size:1em;} }
+@media (min-width:1100px) { table.events  {font-size:1em;} }
+
+table.events tbody td {
+  padding: 0px 0px;/*наименьший размер ячеек*/
+}
+
+table.events thead th {
   position: sticky;
   top: 0;
+  padding: 0px 0px;/*уменьшил размер заголовка*/
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  max-height: fit-content;
+}
+
+.legend-item {
+  margin: 0px 0px;/*минимальные внешние отступы*/
 }

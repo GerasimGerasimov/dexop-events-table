@@ -17,8 +17,8 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
 
   render () {
     return (
-      <div className='wrapper'>
-        <table className=''>
+      <div className='events-wrapper'>
+        <table className='events'>
           <thead>
             <tr>
                 <th>Type</th>
@@ -34,7 +34,9 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                   const {type, initialValue, comment, todo} = {... details}
                   return (
                     <tr key={index}>
-                      <td >{type}</td>
+                      <td className='center'>
+                        <p className='legend-item'>{type}</p>
+                      </td>
                       <td align="left">{tag}</td>
                       <td >{datetime}</td>
                       <td align="left">{comment}</td>
