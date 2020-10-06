@@ -12,8 +12,8 @@ interface IAppState{
   respond: IEventsRespond;
 }
 
-
-const ItemsOnPage: number = 10;
+const TenItemsOnPage: number = 10;
+const TwentyItemsOnPage: number = 20;
 
 export default class App extends Component<IAppProps,IAppState> {
 
@@ -40,14 +40,14 @@ export default class App extends Component<IAppProps,IAppState> {
     let nextIndex: number = this.state.query.FromIndex;
     switch (direction) {
       case IEventQueryDirection.Next:
-        nextIndex  += ItemsOnPage;
+        nextIndex  += this.state.query.QueriedQuantity;//ItemsOnPage;
         const max: number = (this.state.respond.TotalItemsQuantity === 0)
                             ? 0
                             : this.state.respond.TotalItemsQuantity - 1;
         nextIndex = (nextIndex > max)? max : nextIndex;
         break;
       case IEventQueryDirection.Prev:
-        nextIndex  -= ItemsOnPage;
+        nextIndex  -= this.state.query.QueriedQuantity;//ItemsOnPage;
         nextIndex = (nextIndex < 0)? 0 : nextIndex;
         break;
     }
@@ -72,6 +72,15 @@ export default class App extends Component<IAppProps,IAppState> {
     this.setState({respond})
   }
 
+  private setNumberOfItemsOnPage(quantity: number) {
+    this.setState((state)=>({
+      query:{
+        FromIndex: this.state.query.FromIndex,
+        QueriedQuantity: quantity
+      }
+    }), ()=>this.getData())
+  }
+
   render() {
     return (
       <div className='flex-column'>
@@ -84,6 +93,8 @@ export default class App extends Component<IAppProps,IAppState> {
           <button onClick={()=>this.nextItems(IEventQueryDirection.Prev)}>Pred</button>
           <button onClick={()=>this.nextItems(IEventQueryDirection.Next)}>Next</button>
           <span>{this.state.respond.ItemsAfter}</span>
+          <button onClick={()=>this.setNumberOfItemsOnPage(TenItemsOnPage)}>10</button>
+          <button onClick={()=>this.setNumberOfItemsOnPage(TwentyItemsOnPage)}>20</button>
         </div>
       </div>
     );
