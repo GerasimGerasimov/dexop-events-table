@@ -58,8 +58,8 @@ export default class App extends Component<IAppProps,IAppState> {
   private nextItems(direction: IEventQueryDirection) {
     this.setState((state)=>({
       query:{
-        FromIndex: this.getNextIndex(direction),
-        QueriedQuantity: state.query.QueriedQuantity
+        ...state.query,
+        FromIndex: this.getNextIndex(direction)
       }
     }), ()=>this.getData())
   }
@@ -87,11 +87,11 @@ export default class App extends Component<IAppProps,IAppState> {
             : remainingItems;
   }
 
-  private setNumberOfItemsOnPage(quantity: number){
+  private setNumberOfItemsOnPage(QueriedQuantity: number){
     this.setState((state)=>({
       query:{
-        FromIndex: state.query.FromIndex,
-        QueriedQuantity: quantity
+        ...state.query,
+        QueriedQuantity
       }
     }), ()=>this.getData())
   }
