@@ -12,8 +12,9 @@ interface IAppState{
   respond: IEventsRespond;
 }
 
+const minItemsOnPage: number = 10;
+const maxItemsOnPage: number = 30;
 const TenItemsOnPage: number = 10;
-const TwentyItemsOnPage: number = 20;
 
 export default class App extends Component<IAppProps,IAppState> {
 
@@ -72,10 +73,24 @@ export default class App extends Component<IAppProps,IAppState> {
     this.setState({respond})
   }
 
-  private setNumberOfItemsOnPage(quantity: number) {
+  private addItemsOnPage(quantity: number): number {
+    const remainingItems: number = this.state.query.QueriedQuantity + quantity;
+    return (remainingItems > maxItemsOnPage)
+            ? maxItemsOnPage
+            : remainingItems;
+  }
+
+  private subItemsOnPage(quantity: number): number {
+    const remainingItems: number = this.state.query.QueriedQuantity - quantity;
+    return (remainingItems < minItemsOnPage)
+            ? minItemsOnPage
+            : remainingItems;
+  }
+
+  private setNumberOfItemsOnPage(quantity: number){
     this.setState((state)=>({
       query:{
-        FromIndex: this.state.query.FromIndex,
+        FromIndex: state.query.FromIndex,
         QueriedQuantity: quantity
       }
     }), ()=>this.getData())
@@ -93,8 +108,8 @@ export default class App extends Component<IAppProps,IAppState> {
           <button onClick={()=>this.nextItems(IEventQueryDirection.Prev)}>Pred</button>
           <button onClick={()=>this.nextItems(IEventQueryDirection.Next)}>Next</button>
           <span>{this.state.respond.ItemsAfter}</span>
-          <button onClick={()=>this.setNumberOfItemsOnPage(TenItemsOnPage)}>10</button>
-          <button onClick={()=>this.setNumberOfItemsOnPage(TwentyItemsOnPage)}>20</button>
+          <button onClick={()=>this.setNumberOfItemsOnPage(this.addItemsOnPage(TenItemsOnPage))}>+10</button>
+          <button onClick={()=>this.setNumberOfItemsOnPage(this.subItemsOnPage(TenItemsOnPage))}>-10</button>
         </div>
       </div>
     );
