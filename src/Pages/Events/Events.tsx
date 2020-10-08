@@ -84,7 +84,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
   render() {
     return (
       <div className='flex-column'>
-        <div className='b1pxdgr'><button>Search</button></div>
+        <div><button>Search</button></div>
         <div className='flex-all-client b1pxdgr'>
           <EventsTable items = {this.state.respond.Items}/>
         </div>

@@ -1,0 +1,17 @@
+.flex {
+  display: flex;
+}
+
+.alitcn {
+  align-items: stretch;
+}
+
+.jcsa {
+  justify-content: space-around;
+}
+
+div.flex *{
+  /*border: 1px solid red;*/
+  width: 100%;
+  text-align: center;
+}

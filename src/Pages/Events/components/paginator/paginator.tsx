@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { IEventQueryDirection } from "../../../../server/ieventsdata";
+import './paginator.css'
 
 interface IPaginatorProps {
   ItemsBefore: number;
@@ -11,7 +12,7 @@ interface IPaginatorProps {
 }
 
 const minItemsOnPage: number = 10;
-const maxItemsOnPage: number = 30;
+const maxItemsOnPage: number = 40;
 
 export default class Paginator extends Component <IPaginatorProps,{}> {
 
@@ -31,14 +32,14 @@ export default class Paginator extends Component <IPaginatorProps,{}> {
 
   render () {
     return (
-      <div>
-      <span>{this.props.ItemsBefore}</span>
-      <button onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Prev)}>Pred</button>
-      <button onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Next)}>Next</button>
-      <span>{this.props.ItemsAfter}</span>
-      <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.addItemsOnPage(this.props.ItemsPortion))}>+10</button>
-      <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.subItemsOnPage(this.props.ItemsPortion))}>-10</button>
-    </div>
+      <div className='flex alitcn jcsa'>
+        <span>{this.props.ItemsBefore}</span>
+        <button onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Prev)}>Pred</button>
+        <button onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Next)}>Next</button>
+        <span>{this.props.ItemsAfter}</span>
+        <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.addItemsOnPage(this.props.ItemsPortion))}>+10</button>
+        <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.subItemsOnPage(this.props.ItemsPortion))}>-10</button>
+      </div>
     )
   }
 }
