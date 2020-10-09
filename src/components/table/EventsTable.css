@@ -31,5 +31,4 @@ table.events thead th {
 .center {
   display: flex;
   justify-content: center;
-  max-height: fit-content;
 }
