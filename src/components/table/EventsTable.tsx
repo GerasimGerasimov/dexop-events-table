@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { IEventItem} from "../../server/ieventsdata";
-import Markers from "../markers/markers";
+import Markers from "../markers/event-icon";
 import './EventsTable.css'
 
 interface IEventTableProps {

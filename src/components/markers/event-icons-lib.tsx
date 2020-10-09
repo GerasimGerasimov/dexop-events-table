@@ -1,7 +1,20 @@
 import React from "react";
-import './markers.css';
+import './event-icon.css';
 
-export function getIconAlarm(): any{
+export function getEventIconsByType(type: string): JSX.Element {
+  const icons: {[index: string]: any} = {
+    'a': getIconAlarm,
+    'w': getIconWarning,
+    'i': getIconInfo,
+    'defaulf': ()=>{
+      console.log(`${type} not found`);
+      return getIconInfo;
+    }
+  }
+  return (icons[type] || icons['default'])()
+}
+
+function getIconAlarm(): JSX.Element{
   return (
     <svg className='_svg' viewBox="0 0 1 1">
       <g transform='translate(0.15, 0.15) scale(0.85)'>
@@ -12,7 +25,7 @@ export function getIconAlarm(): any{
   )
 }
 
-export function getIconWarning(): any{
+function getIconWarning(): JSX.Element{
   return (
     <svg className='_svg' viewBox="0 0 1 1">
       <g transform='translate(0.15, 0.15) scale(0.85)'>
@@ -23,7 +36,7 @@ export function getIconWarning(): any{
   )
 }
 
-export function getIconInfo(): any{
+function getIconInfo(): JSX.Element{
   return (
     <svg className='_svg' viewBox="0 0 1 1">
       <g transform='translate(0.15, 0.15) scale(0.85)'>
