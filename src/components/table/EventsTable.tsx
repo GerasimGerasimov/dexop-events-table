@@ -16,6 +16,11 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
     super(props)
   }
 
+  private getFormatedDateTime(datetime: string): string {
+    const time = new Date(datetime).toLocaleString();
+    return time;
+  }
+
   render () {
     return (
       <div className='events-wrapper'>
@@ -39,7 +44,7 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                         <Markers type={type}/>
                       </td>
                       <td align="left">{tag}</td>
-                      <td >{datetime}</td>
+                      <td align="left">{this.getFormatedDateTime(datetime)}</td>
                       <td align="left">{comment}</td>
                     </tr>
                   )
