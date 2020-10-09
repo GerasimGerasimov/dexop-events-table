@@ -33,7 +33,3 @@ table.events thead th {
   justify-content: center;
   max-height: fit-content;
 }
-
-.legend-item {
-  margin: 0px 0px;/*минимальные внешние отступы*/
-}

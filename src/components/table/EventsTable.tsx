@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { IEventItem} from "../../server/ieventsdata";
+import Markers from "../markers/markers";
 import './EventsTable.css'
 
 interface IEventTableProps {
@@ -35,7 +36,7 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                   return (
                     <tr key={index}>
                       <td className='center'>
-                        <p className='legend-item'>{type}</p>
+                        <Markers type={type}/>
                       </td>
                       <td align="left">{tag}</td>
                       <td >{datetime}</td>
