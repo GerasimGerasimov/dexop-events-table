@@ -54,13 +54,24 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     return nextIndex;
   }
 
-  private nextItems(direction: IEventQueryDirection) {
+  private isNextPossible(direction: IEventQueryDirection): boolean {
+    return !((direction === IEventQueryDirection.Next)
+           && (this.state.respond.ItemsAfter === 0))
+  }
+
+  private readPortionOfItems(direction: IEventQueryDirection) {
     this.setState((state)=>({
       query:{
         ...state.query,
         FromIndex: this.getNextIndex(direction)
       }
     }), ()=>this.getData())
+  }
+  
+  private getPortionOfItems(direction: IEventQueryDirection) {
+    if (this.isNextPossible(direction)) {
+      this.readPortionOfItems(direction)
+    }
   }
 
   componentDidMount(){
@@ -93,7 +104,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
             ItemsBefore = {this.state.respond.ItemsBefore}
             ItemsPortion = {TenItemsOnPage}
             QueriedQuantity = {this.state.query.QueriedQuantity}
-            nextItemsHandler = {this.nextItems.bind(this)}
+            nextItemsHandler = {this.getPortionOfItems.bind(this)}
             setNumberOfItemsOnPageHandler = {this.setNumberOfItemsOnPage.bind(this)}
           />
       </div>
