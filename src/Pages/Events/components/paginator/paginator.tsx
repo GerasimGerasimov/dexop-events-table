@@ -11,23 +11,49 @@ interface IPaginatorProps {
   setNumberOfItemsOnPageHandler: any;
 }
 
+interface IPaginatorState {
+  addDisabled: boolean;
+  subDisabled: boolean;
+}
+
 const minItemsOnPage: number = 10;
 const maxItemsOnPage: number = 40;
 
-export default class Paginator extends Component <IPaginatorProps,{}> {
+export default class Paginator extends Component <IPaginatorProps,IPaginatorState> {
+
+  constructor (props: IPaginatorProps) {
+    super(props);
+    this.state = {
+      addDisabled: false,
+      subDisabled: true
+    }
+  }
 
   private addItemsOnPage(quantity: number): number {
     const remainingItems: number = this.props.QueriedQuantity + quantity;
-    return (remainingItems > maxItemsOnPage)
-            ? maxItemsOnPage
-            : remainingItems;
+    return (():number => {
+      const result =  (remainingItems > maxItemsOnPage)
+      ? maxItemsOnPage
+      : remainingItems;
+      this.setState({
+        addDisabled:(result === maxItemsOnPage),
+        subDisabled: false})
+      return result;
+    })();
   }
 
   private subItemsOnPage(quantity: number): number {
     const remainingItems: number = this.props.QueriedQuantity - quantity;
-    return (remainingItems < minItemsOnPage)
-            ? minItemsOnPage
-            : remainingItems;
+    return (():number => {
+      const result = (remainingItems < minItemsOnPage)
+      ? minItemsOnPage
+      : remainingItems;
+      this.setState({
+        subDisabled:(result === minItemsOnPage),
+        addDisabled: false
+      })
+      return result;
+    })();
   }
 
   private isDisabled(value: number):boolean {
@@ -45,9 +71,13 @@ export default class Paginator extends Component <IPaginatorProps,{}> {
           disabled={this.isDisabled(this.props.ItemsAfter)}
           onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Next)}>Next</button>
         <span>{this.props.ItemsAfter}</span>
-        <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.addItemsOnPage(this.props.ItemsPortion))}>+10</button>
-        <button onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.subItemsOnPage(this.props.ItemsPortion))}>-10</button>
-      </div>
+        <button
+          disabled={this.state.subDisabled}
+          onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.subItemsOnPage(this.props.ItemsPortion))}>-10</button>       
+        <button
+          disabled={this.state.addDisabled}
+          onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.addItemsOnPage(this.props.ItemsPortion))}>+10</button>
+     </div>
     )
   }
 }
