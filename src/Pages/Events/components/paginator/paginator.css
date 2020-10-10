@@ -11,7 +11,7 @@
 }
 
 div.flex *{
-  /*border: 1px solid red;*/
   width: 100%;
   text-align: center;
+  margin: 0.1em;
 }
