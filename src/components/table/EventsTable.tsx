@@ -27,10 +27,10 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
         <table className='events'>
           <thead>
             <tr>
-                <th>Type</th>
-                <th>Tag</th>
                 <th>Date/Time</th>
+                <th>AW</th>
                 <th>Comment</th>
+                <th>Tag</th>
             </tr>
             </thead>
             <tbody>
@@ -40,12 +40,10 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                   const {type, initialValue, comment, todo} = {... details}
                   return (
                     <tr key={index}>
-                      <td className='center'>
-                        <Markers type={type}/>
-                      </td>
-                      <td align="left">{tag}</td>
                       <td align="left">{this.getFormatedDateTime(datetime)}</td>
-                      <td align="left">{comment}</td>
+                      <td className='center'><Markers type={type}/></td>
+                      <td width="100%" align="left">{comment}</td>
+                      <td align="left">{tag}</td>
                     </tr>
                   )
                 })

@@ -28,6 +28,15 @@ table.events thead th {
   padding: 0px 0px;/*уменьшил размер заголовка*/
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-jc-start {
+  align-items: flex-start;
+  /*justify-content: flex-start;*/
+}
+
 .center {
   display: flex;
   justify-content: center;
