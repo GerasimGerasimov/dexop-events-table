@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { IEventItem} from "../../server/ieventsdata";
+import { IEventItem, ISortDirection, ISortMode} from "../../server/ieventsdata";
 import Markers from "../markers/event-icon";
 import './EventsTable.css'
 
 interface IEventTableProps {
   items: Array<IEventItem>;
+  dateSortDirection: ISortDirection | undefined;
+  eventsSortDirection: ISortDirection | undefined;
+  changeSortModeHandler(SortMode: ISortMode): void;
 }
 
 interface IEventsTableState {
@@ -21,8 +24,11 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
     return time;
   }
 
-  private changeSortMode(e:any){
-    console.log(e.target)
+  private getArrow(direction: ISortDirection | undefined):string {
+    const dir: ISortDirection = direction || ISortDirection.Up;
+    return  (dir === ISortDirection.Up)
+            ? '▲'
+            : '▼'
   }
 
   render () {
@@ -31,9 +37,17 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
         <table className='events'>
           <thead>
             <tr>
-                <th className='arrow' onClick={(e)=>this.changeSortMode(e)}>Date/Time</th>
+                <th
+                  onClick={()=>this.props.changeSortModeHandler(ISortMode.datetime)}>
+                  Date/Time
+                  {` ${this.getArrow(this.props.dateSortDirection)}`}
+                </th>
                 <th>AW</th>
-                <th>Comment</th>
+                <th
+                  onClick={()=>this.props.changeSortModeHandler(ISortMode.events)}>
+                  Comment
+                  {` ${this.getArrow(this.props.eventsSortDirection)}`}
+                </th>
                 <th>Tag</th>
             </tr>
             </thead>

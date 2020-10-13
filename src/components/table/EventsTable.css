@@ -42,8 +42,5 @@ table.events thead th {
   justify-content: center;
 }
 
-.arrow::after {
-  content: '\25b2';
-}
 /*▲ 25b2 Треугольная стрелка вверх*/
 /*▼ 25bc Треугоьная стрелка вниз*/

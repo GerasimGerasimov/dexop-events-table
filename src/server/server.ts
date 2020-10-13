@@ -1,5 +1,5 @@
 import { dataset } from "../datasets/events";
-import { IEventItem, IEventSortDirection, IEventSortItem, IEventsQuery, IEventsRespond, IEventsSortMode } from "./ieventsdata";
+import { IEventItem, IEventSortMode, IEventsQuery, IEventsRespond, IEventsSortMode, ISortDirection } from "./ieventsdata";
 
 export const count = 10;
 
@@ -38,8 +38,9 @@ export class TEventsModel {
     const client: IEventsModelClient = {
       ID:'gerasim',
       SortMode: {
-        SortBy: IEventSortItem.Time,
-        Direction: IEventSortDirection.Down
+        DateTimeSortDirection: ISortDirection.Up,
+        EventsSortDirection: ISortDirection.Up,
+        EventsSortMode: IEventSortMode.Alarm
       },
       Position: 0
     }
@@ -56,8 +57,9 @@ export class TEventsModel {
       ItemsAfter: 0,
       ItemsInRespond: 0,
       SortMode: {
-        SortBy: IEventSortItem.Time,
-        Direction: IEventSortDirection.Down
+        DateTimeSortDirection: ISortDirection.Up,
+        EventsSortDirection: ISortDirection.Up,
+        EventsSortMode: IEventSortMode.Alarm
       },
       Items: []
     }

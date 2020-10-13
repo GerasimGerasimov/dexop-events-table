@@ -11,19 +11,37 @@ export interface IEventItem {
   details: IEventItemDetails;
 }
 
-export enum IEventSortDirection {
+export enum ISortMode {
+  datetime,
+  events
+}
+
+export enum ISortDirection {
   Up,
   Down
 }
 
-export enum IEventSortItem {
-  Time,
-  Type
+
+export enum IEventSortMode {
+  All     = '',
+  Alarm   ='a',
+  Warning = 'w',
+  Info    = 'i'
 }
 
+/*
+export const IEventSortMode = new Map ([
+  ['All',''],
+  ['Alarm', 'a'],
+  ['Warning', 'w'],
+  ['Info','i']
+])
+*/
+
 export interface IEventsSortMode {
-  Direction: IEventSortDirection;
-  SortBy: IEventSortItem;
+  DateTimeSortDirection: ISortDirection;
+  EventsSortDirection: ISortDirection;
+  EventsSortMode: IEventSortMode;
 }
 
 export enum IEventQueryDirection {
@@ -33,7 +51,7 @@ export enum IEventQueryDirection {
 
 export interface IEventsQuery {
   ClientID?: string; //уникальный ID клиента
-  SortMode?: IEventsSortMode;//как сортировать данные для этого клиента
+  SortMode: IEventsSortMode;//как сортировать данные для этого клиента
   FromIndex: number;
   QueriedQuantity: number;
   Direction?: IEventQueryDirection;

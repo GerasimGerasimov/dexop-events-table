@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import EventsTable from "../../components/table/EventsTable";
-import { IEventQueryDirection, IEventsQuery, IEventsRespond } from "../../server/ieventsdata";
+import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventsSortMode, IEventSortMode, ISortMode } from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
@@ -22,7 +22,12 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     this.state = {
       query: {
         FromIndex:0,
-        QueriedQuantity: 10
+        QueriedQuantity: 10,
+        SortMode: {
+          DateTimeSortDirection: ISortDirection.Up,
+          EventsSortDirection: ISortDirection.Up,
+          EventsSortMode:  IEventSortMode.All
+        }
       },
       respond: {
         ClientID: '',
@@ -92,6 +97,29 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     }), ()=>this.getData())
   }
 
+  private tougleSortDirection(direction: ISortDirection): ISortDirection {
+    return  (direction === ISortDirection.Up)
+            ? ISortDirection.Down
+            : ISortDirection.Up
+  }
+
+  private changeSortMode(SortMode: ISortMode): void {
+    console.log(SortMode);
+    const query = {... this.state.query};
+    switch (SortMode) {
+      case ISortMode.datetime:
+        const DateTimeSortDirection = this.tougleSortDirection(query.SortMode.DateTimeSortDirection);
+        query.SortMode.DateTimeSortDirection = DateTimeSortDirection;
+        break;
+      case ISortMode.events:
+        /**TODO 4-режима сортировки! */
+        const EventsSortDirection = this.tougleSortDirection(query.SortMode.EventsSortDirection);
+        query.SortMode.EventsSortDirection = EventsSortDirection;
+        break;
+    }
+    this.setState({query})
+  }
+
   render() {
     return (
       <div className='flex-column'>
@@ -100,7 +128,12 @@ export default class Events extends Component <IEventsProps,IEventsState> {
           <input type="datetime-local"/>
         </div>
         <div className='flex-all-client b1pxdgr'>
-          <EventsTable items = {this.state.respond.Items}/>
+          <EventsTable
+            items = {this.state.respond.Items}
+            dateSortDirection = {this.state.query.SortMode?.DateTimeSortDirection}
+            eventsSortDirection = {this.state.query.SortMode?.EventsSortDirection}
+            changeSortModeHandler = {this.changeSortMode.bind(this)}
+          />
         </div>
           <Paginator
             ItemsAfter = {this.state.respond.ItemsAfter}
