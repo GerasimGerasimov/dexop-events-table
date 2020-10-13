@@ -21,13 +21,17 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
     return time;
   }
 
+  private changeSortMode(e:any){
+    console.log(e.target)
+  }
+
   render () {
     return (
       <div className='events-wrapper'>
         <table className='events'>
           <thead>
             <tr>
-                <th>Date/Time</th>
+                <th className='arrow' onClick={(e)=>this.changeSortMode(e)}>Date/Time</th>
                 <th>AW</th>
                 <th>Comment</th>
                 <th>Tag</th>
