@@ -40,7 +40,6 @@ export const IEventSortMode = new Map ([
 
 export interface IEventsSortMode {
   DateTimeSortDirection: ISortDirection;
-  EventsSortDirection: ISortDirection;
   EventsSortMode: IEventSortMode;
 }
 

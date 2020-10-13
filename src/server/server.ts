@@ -39,7 +39,6 @@ export class TEventsModel {
       ID:'gerasim',
       SortMode: {
         DateTimeSortDirection: ISortDirection.Up,
-        EventsSortDirection: ISortDirection.Up,
         EventsSortMode: IEventSortMode.Alarm
       },
       Position: 0
@@ -58,7 +57,6 @@ export class TEventsModel {
       ItemsInRespond: 0,
       SortMode: {
         DateTimeSortDirection: ISortDirection.Up,
-        EventsSortDirection: ISortDirection.Up,
         EventsSortMode: IEventSortMode.Alarm
       },
       Items: []

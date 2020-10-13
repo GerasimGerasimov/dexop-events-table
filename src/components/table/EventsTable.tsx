@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { IEventItem, ISortDirection, ISortMode} from "../../server/ieventsdata";
+import { IEventItem, IEventSortMode, ISortDirection, ISortMode} from "../../server/ieventsdata";
 import Markers from "../markers/event-icon";
 import './EventsTable.css'
 
 interface IEventTableProps {
   items: Array<IEventItem>;
   dateSortDirection: ISortDirection | undefined;
-  eventsSortDirection: ISortDirection | undefined;
+  eventsSortMode: IEventSortMode | undefined;
   changeSortModeHandler(SortMode: ISortMode): void;
 }
 
@@ -31,6 +31,14 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
             : '▼'
   }
 
+  private getFigures(Mode: IEventSortMode | undefined):string {
+    const mode: IEventSortMode = Mode || IEventSortMode.All;
+    if (mode === IEventSortMode.Alarm)   { return '⬥'};
+    if (mode === IEventSortMode.Warning) { return '∎'};
+    if (mode === IEventSortMode.Info)    { return '▲'};
+    return '⋮' //all
+  }
+
   render () {
     return (
       <div className='events-wrapper'>
@@ -46,7 +54,7 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
                 <th
                   onClick={()=>this.props.changeSortModeHandler(ISortMode.events)}>
                   Comment
-                  {` ${this.getArrow(this.props.eventsSortDirection)}`}
+                  {` ${this.getFigures(this.props.eventsSortMode)}`}
                 </th>
                 <th>Tag</th>
             </tr>

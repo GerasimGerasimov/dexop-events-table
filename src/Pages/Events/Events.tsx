@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import EventsTable from "../../components/table/EventsTable";
-import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventsSortMode, IEventSortMode, ISortMode } from "../../server/ieventsdata";
+import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISortMode } from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
@@ -25,7 +25,6 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         QueriedQuantity: 10,
         SortMode: {
           DateTimeSortDirection: ISortDirection.Up,
-          EventsSortDirection: ISortDirection.Up,
           EventsSortMode:  IEventSortMode.All
         }
       },
@@ -103,21 +102,37 @@ export default class Events extends Component <IEventsProps,IEventsState> {
             : ISortDirection.Up
   }
 
-  private changeSortMode(SortMode: ISortMode): void {
-    console.log(SortMode);
-    const query = {... this.state.query};
-    switch (SortMode) {
-      case ISortMode.datetime:
-        const DateTimeSortDirection = this.tougleSortDirection(query.SortMode.DateTimeSortDirection);
-        query.SortMode.DateTimeSortDirection = DateTimeSortDirection;
-        break;
-      case ISortMode.events:
-        /**TODO 4-режима сортировки! */
-        const EventsSortDirection = this.tougleSortDirection(query.SortMode.EventsSortDirection);
-        query.SortMode.EventsSortDirection = EventsSortDirection;
-        break;
+  private tougleEventsSortDirection(mode: IEventSortMode): IEventSortMode {
+    return mode;
+  }
+
+  private isSortModeDateTimeAndTougle(SortMode: ISortMode): IEventsQuery | undefined{
+    if (SortMode === ISortMode.datetime) {
+      const query = {... this.state.query}
+      const { DateTimeSortDirection }  =  { ...query.SortMode};
+      query.SortMode.DateTimeSortDirection = this.tougleSortDirection(DateTimeSortDirection);
+      return query;
     }
-    this.setState({query})
+    return undefined;
+  }
+
+  private isSortModeDateEvensAndTougle(SortMode: ISortMode): IEventsQuery | undefined{
+    if (SortMode === ISortMode.events) {
+      const query = {... this.state.query}
+      const { EventsSortMode }  =  { ...query.SortMode};
+      query.SortMode.EventsSortMode = this.tougleEventsSortDirection(EventsSortMode);
+      return query;
+    }
+    return undefined;
+  }
+
+  private changeSortMode(SortMode: ISortMode): void {
+    const query: IEventsQuery | undefined = 
+      this.isSortModeDateTimeAndTougle(SortMode) ||
+      this.isSortModeDateEvensAndTougle(SortMode)
+    if (query !== undefined) {
+      this.setState({query})
+    }
   }
 
   render() {
@@ -131,7 +146,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
           <EventsTable
             items = {this.state.respond.Items}
             dateSortDirection = {this.state.query.SortMode?.DateTimeSortDirection}
-            eventsSortDirection = {this.state.query.SortMode?.EventsSortDirection}
+            eventsSortMode = {this.state.query.SortMode?.EventsSortMode}
             changeSortModeHandler = {this.changeSortMode.bind(this)}
           />
         </div>
