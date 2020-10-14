@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { IEventItem, IEventSortMode, ISortDirection, ISortMode} from "../../server/ieventsdata";
+import { IEventItem} from "../../server/ieventsdata";
 import Markers from "../markers/event-icon";
 import './EventsTable.css'
 
 interface IEventTableProps {
   items: Array<IEventItem>;
-  dateSortDirection: ISortDirection | undefined;
-  eventsSortMode: IEventSortMode | undefined;
-  changeSortModeHandler(SortMode: ISortMode): void;
+  DateSortDirectionIcon: string;
+  EventsSortModeIcon: string;
+  changeDateSortModeHandler(): void;
+  changeEventsSortModeHandler(): void;
 }
 
 interface IEventsTableState {
@@ -15,28 +16,10 @@ interface IEventsTableState {
 }
 
 export default class EventsTable extends Component<IEventTableProps ,IEventsTableState> {
-  constructor(props: IEventTableProps) {
-    super(props)
-  }
 
   private getFormatedDateTime(datetime: string): string {
     const time = new Date(datetime).toLocaleString();
     return time;
-  }
-
-  private getArrow(direction: ISortDirection | undefined):string {
-    const dir: ISortDirection = direction || ISortDirection.Up;
-    return  (dir === ISortDirection.Up)
-            ? '▲'
-            : '▼'
-  }
-
-  private getFigures(Mode: IEventSortMode | undefined):string {
-    const mode: IEventSortMode = Mode || IEventSortMode.All;
-    if (mode === IEventSortMode.Alarm)   { return '⬥'};
-    if (mode === IEventSortMode.Warning) { return '∎'};
-    if (mode === IEventSortMode.Info)    { return '▲'};
-    return '⋮' //all
   }
 
   render () {
@@ -46,15 +29,13 @@ export default class EventsTable extends Component<IEventTableProps ,IEventsTabl
           <thead>
             <tr>
                 <th
-                  onClick={()=>this.props.changeSortModeHandler(ISortMode.datetime)}>
-                  Date/Time
-                  {` ${this.getArrow(this.props.dateSortDirection)}`}
+                  onClick={()=>this.props.changeDateSortModeHandler()}>
+                  Date/Time {this.props.DateSortDirectionIcon}
                 </th>
                 <th>AW</th>
                 <th
-                  onClick={()=>this.props.changeSortModeHandler(ISortMode.events)}>
-                  Comment
-                  {` ${this.getFigures(this.props.eventsSortMode)}`}
+                  onClick={()=>this.props.changeEventsSortModeHandler()}>
+                  Comment {this.props.EventsSortModeIcon}
                 </th>
                 <th>Tag</th>
             </tr>

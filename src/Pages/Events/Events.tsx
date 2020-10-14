@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import EventsTable from "../../components/table/EventsTable";
-import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISortMode } from "../../server/ieventsdata";
+import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode} from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
@@ -96,43 +96,53 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     }), ()=>this.getData())
   }
 
-  private tougleSortDirection(direction: ISortDirection): ISortDirection {
+  private tougleDateSortDirection(direction: ISortDirection): ISortDirection {
     return  (direction === ISortDirection.Up)
             ? ISortDirection.Down
             : ISortDirection.Up
   }
 
-  private tougleEventsSortDirection(mode: IEventSortMode): IEventSortMode {
-    return mode;
-  }
-
-  private isSortModeDateTimeAndTougle(SortMode: ISortMode): IEventsQuery | undefined{
-    if (SortMode === ISortMode.datetime) {
-      const query = {... this.state.query}
-      const { DateTimeSortDirection }  =  { ...query.SortMode};
-      query.SortMode.DateTimeSortDirection = this.tougleSortDirection(DateTimeSortDirection);
-      return query;
-    }
-    return undefined;
-  }
-
-  private isSortModeDateEvensAndTougle(SortMode: ISortMode): IEventsQuery | undefined{
-    if (SortMode === ISortMode.events) {
-      const query = {... this.state.query}
-      const { EventsSortMode }  =  { ...query.SortMode};
-      query.SortMode.EventsSortMode = this.tougleEventsSortDirection(EventsSortMode);
-      return query;
-    }
-    return undefined;
-  }
-
-  private changeSortMode(SortMode: ISortMode): void {
-    const query: IEventsQuery | undefined = 
-      this.isSortModeDateTimeAndTougle(SortMode) ||
-      this.isSortModeDateEvensAndTougle(SortMode)
+  private changeDateSortMode(): void {
+    const query = {... this.state.query}
+    const { DateTimeSortDirection }  =  { ...query.SortMode};
+    query.SortMode.DateTimeSortDirection = this.tougleDateSortDirection(DateTimeSortDirection);
     if (query !== undefined) {
       this.setState({query})
     }
+  }
+
+  private getDateSortDirectionIcon(direction: ISortDirection | undefined):string {
+    const dir: ISortDirection = direction || ISortDirection.Up;
+    return  (dir === ISortDirection.Up)
+            ? '▲'
+            : '▼'
+  }
+
+  private tougleEventsSortMode(mode: IEventSortMode): IEventSortMode {
+    if (mode === IEventSortMode.All)     { return IEventSortMode.Alarm };
+    if (mode === IEventSortMode.Alarm)   { return IEventSortMode.Warning };
+    if (mode === IEventSortMode.Warning) { return IEventSortMode.Info };
+    if (mode === IEventSortMode.Info)    { return IEventSortMode.All };
+    return IEventSortMode.All;
+  }
+
+  private changeEventsSortMode() {
+    const query = {... this.state.query}
+    const { EventsSortMode }  =  { ...query.SortMode};
+    query.SortMode.EventsSortMode = this.tougleEventsSortMode(EventsSortMode);
+    if (query !== undefined) {
+      this.setState({query},(()=>{
+        console.log(this.getEventSortModeIcon(query.SortMode.EventsSortMode))
+      }))
+    }
+  }
+
+  private getEventSortModeIcon(Mode: IEventSortMode):string {
+    const mode: IEventSortMode = Mode || IEventSortMode.All;
+    if (mode === IEventSortMode.Alarm)   { return '⬥'};
+    if (mode === IEventSortMode.Warning) { return '∎'};
+    if (mode === IEventSortMode.Info)    { return '▲'};
+    return '⋮' //All
   }
 
   render() {
@@ -145,9 +155,10 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         <div className='flex-all-client b1pxdgr'>
           <EventsTable
             items = {this.state.respond.Items}
-            dateSortDirection = {this.state.query.SortMode?.DateTimeSortDirection}
-            eventsSortMode = {this.state.query.SortMode?.EventsSortMode}
-            changeSortModeHandler = {this.changeSortMode.bind(this)}
+            DateSortDirectionIcon = {this.getDateSortDirectionIcon(this.state.query.SortMode?.DateTimeSortDirection)}
+            EventsSortModeIcon = {this.getEventSortModeIcon(this.state.query.SortMode?.EventsSortMode)}
+            changeDateSortModeHandler = {this.changeDateSortMode.bind(this)}
+            changeEventsSortModeHandler = {this.changeEventsSortMode.bind(this)}
           />
         </div>
           <Paginator

@@ -11,16 +11,10 @@ export interface IEventItem {
   details: IEventItemDetails;
 }
 
-export enum ISortMode {
-  datetime,
-  events
-}
-
 export enum ISortDirection {
   Up,
   Down
 }
-
 
 export enum IEventSortMode {
   All     = '',
