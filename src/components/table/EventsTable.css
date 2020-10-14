@@ -22,6 +22,11 @@ table.events tbody td {
   padding: 0px 0px;/*наименьший размер ячеек*/
 }
 
+table.events tbody td {
+  color: black;
+  background: #D8E6F3
+}
+
 table.events thead th {
   position: sticky;
   top: 0;
