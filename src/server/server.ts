@@ -63,8 +63,22 @@ export class TEventsModel {
     }
   }
 
-  private getSortedItems(Items: Array<IEventItem>, SortMode: IEventsSortMode): Array<IEventItem> {
+  private getSortedMap(Items:Array<IEventItem>, DateTimeSortDirection: ISortDirection):Map<string, Array<IEventItem>>{
     const res:Map<string, Array<IEventItem>> = new Map();
+    const a: any = Object.entries(IEventSortMode);
+    for (const [key, type] of a) {
+        console.log(key, type)
+        if (type) {
+            res.set(type,Items
+                        .filter(item=> item.details.type === type)
+                        .sort(sortByDate(DateTimeSortDirection))
+                  )
+        }
+    }
+    return res;
+  }
+
+  private getSortedItems(Items: Array<IEventItem>, SortMode: IEventsSortMode): Array<IEventItem> {
     const items:Array<IEventItem> = Items;
     //если не надо сортировать по типам событий, а просто все события
     //в хронологическом порядке
@@ -72,16 +86,7 @@ export class TEventsModel {
       items.sort(sortByDate(SortMode.DateTimeSortDirection));
     } else {
       //1) получаю от 1 до 3х (по типам событий) отсортированных по времени массивов
-      const a: any = Object.entries(IEventSortMode);
-      for (const [key, type] of a) {
-          console.log(key, type)
-          if (type) {
-              res.set(type,Items
-                          .filter(item=> item.details.type === type)
-                          .sort(sortByDate(SortMode.DateTimeSortDirection))
-                    )
-          }
-      }
+      const res:Map<string, Array<IEventItem>> = this.getSortedMap(Items, SortMode.DateTimeSortDirection);
       //2) Теперь надо собрать их в один массив в зависимости от типа события
       if (SortMode.EventsSortMode === IEventSortMode.Alarm) {
         let result: Array<IEventItem> = [];
