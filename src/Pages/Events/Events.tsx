@@ -107,7 +107,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     const { DateTimeSortDirection }  =  { ...query.SortMode};
     query.SortMode.DateTimeSortDirection = this.tougleDateSortDirection(DateTimeSortDirection);
     if (query !== undefined) {
-      this.setState({query})
+      this.setState({query}, ()=>this.getData())
     }
   }
 

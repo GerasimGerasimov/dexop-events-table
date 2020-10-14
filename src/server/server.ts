@@ -63,9 +63,29 @@ export class TEventsModel {
     }
   }
 
+  private sortByDateTime(Items: Array<IEventItem>, direction: ISortDirection): Array<IEventItem>{
+    function sort(A:IEventItem, B:IEventItem): number {
+      const a: number = new Date(A.datetime).getTime();
+      const b: number = new Date(B.datetime).getTime();
+      return  (direction === ISortDirection.Up)
+              ? a-b
+              : b-a
+    }
+
+    return Items.sort(sort);
+  }
+
+  private getSortedItems(Items: Array<IEventItem>, SortMode: IEventsSortMode): Array<IEventItem> {
+    console.log(SortMode.DateTimeSortDirection);
+    const items:Array<IEventItem> = this.sortByDateTime(Items, SortMode.DateTimeSortDirection);
+    return items;
+  }
+
   public getItems(query: IEventsQuery): IEventsRespond {
     const result: IEventsRespond = this.defaultEventRespond();
-    const ItemsArray: Array<IEventItem> = this.Items.slice(query.FromIndex, query.FromIndex+query.QueriedQuantity);
+    const unSortedItems:Array<IEventItem> = this.Items;
+    const sortedItems: Array<IEventItem> = this.getSortedItems(unSortedItems, query.SortMode);
+    const ItemsArray: Array<IEventItem> = sortedItems.slice(query.FromIndex, query.FromIndex+query.QueriedQuantity);
     result.Items = ItemsArray;
     result.ItemsBefore = query.FromIndex;
     result.ItemsAfter = result.TotalItemsQuantity - (query.FromIndex + ItemsArray.length) ;
