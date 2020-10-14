@@ -63,21 +63,51 @@ export class TEventsModel {
     }
   }
 
-  private sortByDateTime(Items: Array<IEventItem>, direction: ISortDirection): Array<IEventItem>{
-    function sort(A:IEventItem, B:IEventItem): number {
-      const a: number = new Date(A.datetime).getTime();
-      const b: number = new Date(B.datetime).getTime();
-      return  (direction === ISortDirection.Up)
-              ? a-b
-              : b-a
-    }
-
-    return Items.sort(sort);
-  }
-
   private getSortedItems(Items: Array<IEventItem>, SortMode: IEventsSortMode): Array<IEventItem> {
-    console.log(SortMode.DateTimeSortDirection);
-    const items:Array<IEventItem> = this.sortByDateTime(Items, SortMode.DateTimeSortDirection);
+    const res:Map<string, Array<IEventItem>> = new Map();
+    const items:Array<IEventItem> = Items;
+    //если не надо сортировать по типам событий, а просто все события
+    //в хронологическом порядке
+    if (SortMode.EventsSortMode === IEventSortMode.All) {
+      items.sort(sortByDate(SortMode.DateTimeSortDirection));
+    } else {
+      //1) получаю от 1 до 3х (по типам событий) отсортированных по времени массивов
+      const a: any = Object.entries(IEventSortMode);
+      for (const [key, type] of a) {
+          console.log(key, type)
+          if (type) {
+              res.set(type,Items
+                          .filter(item=> item.details.type === type)
+                          .sort(sortByDate(SortMode.DateTimeSortDirection))
+                    )
+          }
+      }
+      //2) Теперь надо собрать их в один массив в зависимости от типа события
+      if (SortMode.EventsSortMode === IEventSortMode.Alarm) {
+        let result: Array<IEventItem> = [];
+        return result.concat(
+          res.get(IEventSortMode.Alarm) || [],
+          res.get(IEventSortMode.Warning) || [],
+          res.get(IEventSortMode.Info) || []
+        )
+      }
+      if (SortMode.EventsSortMode === IEventSortMode.Warning) {
+        let result: Array<IEventItem> = [];
+        return result.concat(
+          res.get(IEventSortMode.Warning) || [],
+          res.get(IEventSortMode.Alarm) || [],
+          res.get(IEventSortMode.Info) || []
+        )
+      }
+      if (SortMode.EventsSortMode === IEventSortMode.Info) {
+        let result: Array<IEventItem> = [];
+        return result.concat(
+          res.get(IEventSortMode.Info) || [],
+          res.get(IEventSortMode.Warning) || [],
+          res.get(IEventSortMode.Alarm) || []
+        )
+      }
+    }
     return items;
   }
 
@@ -95,3 +125,13 @@ export class TEventsModel {
 }
 
 export const EventsModel:TEventsModel = new TEventsModel(dataset);
+
+function sortByDate(direction: ISortDirection): any {
+  return function sort(A:IEventItem, B:IEventItem): number {
+      const a: number = new Date(A.datetime).getTime();
+      const b: number = new Date(B.datetime).getTime();
+      return  (direction === ISortDirection.Up)
+              ? a-b
+              : b-a
+  }
+}

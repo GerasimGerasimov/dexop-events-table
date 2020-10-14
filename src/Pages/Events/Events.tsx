@@ -132,7 +132,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     query.SortMode.EventsSortMode = this.tougleEventsSortMode(EventsSortMode);
     if (query !== undefined) {
       this.setState({query},(()=>{
-        console.log(this.getEventSortModeIcon(query.SortMode.EventsSortMode))
+        console.log(this.getEventSortModeIcon(query.SortMode.EventsSortMode));
+        this.getData();
       }))
     }
   }
