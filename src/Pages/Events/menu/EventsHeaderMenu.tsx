@@ -13,8 +13,7 @@ export interface IToolMenuProps {
 
 export default class EventsHeaderMenu extends Component <IToolMenuProps,{}> {
   private ToolMenu: Array<IToolButtonProps> = [
-    { name: 'onLine', type:'ToolButton', icon:['fa-network-wired'], onClick:this.props.ToolMenuHandler},
-    { name: 'DB', type:'ToolButton', icon:['fa-database'],onClick:this.props.ToolMenuHandler}
+    { name: 'Search', type:'ToolButton', icon:['fa-search'], onClick:this.props.ToolMenuHandler}
   ]
     
   render () {
