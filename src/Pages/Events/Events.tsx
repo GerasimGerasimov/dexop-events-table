@@ -4,6 +4,7 @@ import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEv
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
+import EventsHeaderMenu from "./menu/EventsHeaderMenu";
 
 interface IEventsProps{
 }
@@ -146,13 +147,25 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     return '⋮' //All
   }
 
+  private handlerToolMenu(name: string, status: boolean){
+    /*
+    const handlers: {[handlerName: string]: any} = {
+      'ZoomMinus' : this.onZoomMinus.bind(this),
+      'ZoomPlus'  : this.onZoomPlus.bind(this),
+      'PlayPause' : this.onPlayPause.bind(this),
+      'default'   : ()=>{console.log(`${name} not found`)}
+    }
+    return (handlers[name] || handlers['default'])(status)
+    */
+  }
+
   render() {
     return (
       <div className='flex-column'>
-        <div>
-          <button>Search</button>
-          <input type="datetime-local"/>
-        </div>
+        <EventsHeaderMenu
+            ToolMenuHandler = {this.handlerToolMenu.bind(this)}
+            isTougle = {false}
+          />
         <div className='flex-all-client b1pxdgr'>
           <EventsTable
             items = {this.state.respond.Items}
@@ -174,3 +187,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     );
   }
 }
+
+/*
+          <button>Search</button>
+          <input type="datetime-local"/>
+*/
