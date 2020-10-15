@@ -27,6 +27,12 @@ table.events tbody td {
   background: #D8E6F3
 }
 
+table.events tbody tr:hover td {
+  font-weight: normal;
+  background-color:lightgray;
+  transition: background-color .15s ease-in;
+}
+
 table.events thead th {
   position: sticky;
   top: 0;
