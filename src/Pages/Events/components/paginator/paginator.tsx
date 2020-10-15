@@ -65,16 +65,20 @@ export default class Paginator extends Component <IPaginatorProps,IPaginatorStat
       <div className='flex alitcn jcsa'>
         <span>{this.props.ItemsBefore}</span>
         <button
+          className="btn btn-primary"
           disabled={this.isDisabled(this.props.ItemsBefore)}
           onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Prev)}>Pred</button>
         <button
+          className="btn btn-primary"
           disabled={this.isDisabled(this.props.ItemsAfter)}
           onClick={()=>this.props.nextItemsHandler(IEventQueryDirection.Next)}>Next</button>
         <span>{this.props.ItemsAfter}</span>
         <button
+          className="btn btn-secondary"
           disabled={this.state.subDisabled}
           onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.subItemsOnPage(this.props.ItemsPortion))}>-10</button>       
         <button
+          className="btn btn-secondary"
           disabled={this.state.addDisabled}
           onClick={()=>this.props.setNumberOfItemsOnPageHandler(this.addItemsOnPage(this.props.ItemsPortion))}>+10</button>
      </div>
