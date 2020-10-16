@@ -35,15 +35,6 @@ td {
   background: #D8E6F3;
 }
 
-th:first-child, td:first-child {
-  text-align: left;
-}
-
-tr:hover td{
-  background: rgb(118, 197, 144);
-  font-weight: bold;
-  }
-
 .modal {
   background-color: rgba(0,0,0,0.5);
   position: fixed;
