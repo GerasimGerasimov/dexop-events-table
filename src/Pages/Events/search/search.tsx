@@ -21,6 +21,9 @@ export interface ISearchState {
 }
 
 export default class Search extends Component<ISearchProps, ISearchState> {
+  //datetime-local
+  private refFromDate = React.createRef<HTMLInputElement>();
+  private refToDate   = React.createRef<HTMLInputElement>();
 
   constructor (props: ISearchProps) {
     super(props);
@@ -46,6 +49,16 @@ export default class Search extends Component<ISearchProps, ISearchState> {
             : ' d-none'
   }
 
+  private getQuery(): ISearchQuery | undefined {
+    return undefined;
+  }
+
+  private chahgeDateTime(e: any) {
+    if (!e.target['validity'].valid) return;
+    const dt:string= e.target['value'] + ':00Z';
+    console.log(dt)
+  }
+
   render(){
     return (
       <div className='search block grid-container'>
@@ -68,14 +81,21 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           className={'search LabelFrom' + this.showIfUsed(this.state.useDataRangeInSearch)}
           htmlFor="fromDate">from:</label>
         <input
+          type="datetime-local"
+          ref = {this.refFromDate}
+          id='fromDate'
           className={'search InputFrom' + this.showIfUsed(this.state.useDataRangeInSearch)}
-          id='fromDate' type="datetime-local"/>
+          onChange={(e)=>this.chahgeDateTime(e)}
+          />
         <label
           className={'search LabelTo' + this.showIfUsed(this.state.useDataRangeInSearch)}
           htmlFor="toDate">to:</label>
         <input
+          type="datetime-local"
+          ref = {this.refToDate}
+          id='toDate'
           className={'search InputTo' + this.showIfUsed(this.state.useDataRangeInSearch)}
-          id='toDate' type="datetime-local"/>
+          />
 
         <div className='search EventConditionPicker'>
           <div className=' custom-control custom-checkbox'>
@@ -105,7 +125,7 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           className={'btn btn-primary btn-xs search Search'+
                      this.showIfUsed(this.state.useDataRangeInSearch ||
                                      this.state.useEventTypeInSearch)}
-          onClick={()=>this.props.onExitHandler(undefined)}
+          onClick={()=>this.props.onExitHandler(this.getQuery())}
         >Search</button>
         <button
           className="btn btn-secondary btn-xs search Cancel"

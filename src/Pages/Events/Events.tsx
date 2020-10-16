@@ -156,9 +156,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     this.setState({showModal: true})
     /*
     const handlers: {[handlerName: string]: any} = {
-      'ZoomMinus' : this.onZoomMinus.bind(this),
-      'ZoomPlus'  : this.onZoomPlus.bind(this),
-      'PlayPause' : this.onPlayPause.bind(this),
+      'Search' : this.onSearch.bind(this),
       'default'   : ()=>{console.log(`${name} not found`)}
     }
     return (handlers[name] || handlers['default'])(status)
