@@ -6,7 +6,7 @@ import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
 import EventsHeaderMenu from "./menu/EventsHeaderMenu";
-import Search from "./search/search";
+import Search, { ISearchQuery } from "./search/search";
 
 interface IEventsProps{
 }
@@ -165,11 +165,17 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     */
   }
 
+  private handlerSearchFormClose(result: ISearchQuery | undefined) {
+    this.setState({showModal:false})
+  }
+
   render() {
     const modal = this.state.showModal
     ? (
       <Modal>
-        <Search></Search>
+        <Search
+          onExitHandler = {this.handlerSearchFormClose.bind(this)}
+        />
       </Modal>
     )
     : null;
