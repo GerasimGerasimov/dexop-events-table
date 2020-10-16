@@ -7,8 +7,9 @@
 
 .search.grid-container {
   display: grid;
+  overflow: hidden;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  grid-template-rows: 0.5fr 0.5fr auto auto 0.5fr auto 0.5fr;
   gap: 2px 2px;
   grid-template-areas:
     "Header Header"
@@ -24,9 +25,9 @@
 
 .search.DateConditionPicker { grid-area: DateConditionPicker; }
 
-.search.LabelFrom { grid-area: LabelFrom; }
+.search.LabelFrom { grid-area: LabelFrom; height: auto;}
 
-.search.LabelTo { grid-area: LabelTo; }
+.search.LabelTo { grid-area: LabelTo; height: auto;}
 
 .search.InputFrom { grid-area: InputFrom; }
 

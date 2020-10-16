@@ -40,6 +40,12 @@ export default class Search extends Component<ISearchProps, ISearchState> {
     this.setState({useEventTypeInSearch:checkerTougle})
   }
 
+  private showIfUsed(isUsed: boolean): string {
+    return  (isUsed)
+            ? ''
+            : ' d-none'
+  }
+
   render(){
     return (
       <div className='search block grid-container'>
@@ -58,10 +64,18 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           </div>
         </div>
 
-        <label className='search LabelFrom' htmlFor="fromDate">from:</label>
-        <input className='search InputFrom' id='fromDate' type="datetime-local"/>
-        <label className='search LabelTo' htmlFor="toDate">to:</label>
-        <input className='search InputTo' id='toDate' type="datetime-local"/>
+        <label
+          className={'search LabelFrom' + this.showIfUsed(this.state.useDataRangeInSearch)}
+          htmlFor="fromDate">from:</label>
+        <input
+          className={'search InputFrom' + this.showIfUsed(this.state.useDataRangeInSearch)}
+          id='fromDate' type="datetime-local"/>
+        <label
+          className={'search LabelTo' + this.showIfUsed(this.state.useDataRangeInSearch)}
+          htmlFor="toDate">to:</label>
+        <input
+          className={'search InputTo' + this.showIfUsed(this.state.useDataRangeInSearch)}
+          id='toDate' type="datetime-local"/>
 
         <div className='search EventConditionPicker'>
           <div className=' custom-control custom-checkbox'>
@@ -77,7 +91,7 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           </div>
         </div>
 
-        <div className='search EventPicker'>
+        <div className={'search EventPicker' + this.showIfUsed(this.state.useEventTypeInSearch)}>
           <label htmlFor="events-select">Choose an Event:</label>
           <select id="events-select">
             <option value="">--Please choose an Event--</option>
