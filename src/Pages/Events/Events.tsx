@@ -172,7 +172,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
   render() {
     const modal = this.state.showModal
     ? (
-      <Modal>
+      <Modal classes='content-center'>
         <Search
           onExitHandler = {this.handlerSearchFormClose.bind(this)}
         />
