@@ -1,10 +1,10 @@
-import React, { Component } from "react"
+import React, { Component, RefObject } from "react"
 import './search.css'
 
 export interface ISearchQuery {
-  dateFrom: number;
-  dateTo: number;
-  event: number;
+  dateFrom?: number;
+  dateTo?: number;
+  event?: string;
 }
 
 export interface ISearchFormCloseHandler {
@@ -21,9 +21,10 @@ export interface ISearchState {
 }
 
 export default class Search extends Component<ISearchProps, ISearchState> {
-  //datetime-local
+
   private refFromDate = React.createRef<HTMLInputElement>();
   private refToDate   = React.createRef<HTMLInputElement>();
+  private refEvent    = React.createRef<HTMLSelectElement>();
 
   constructor (props: ISearchProps) {
     super(props);
@@ -49,14 +50,56 @@ export default class Search extends Component<ISearchProps, ISearchState> {
             : ' d-none'
   }
 
-  private getQuery(): ISearchQuery | undefined {
-    return undefined;
+  private validateDateTime(DateTimeStr: string | undefined): number | undefined {
+    const dateTimeStr: string = DateTimeStr || '';
+    const ms = Date.parse(dateTimeStr);
+    return  (isNaN(ms))
+            ? undefined
+            : ms
   }
 
-  private chahgeDateTime(e: any) {
-    if (!e.target['validity'].valid) return;
-    const dt:string= e.target['value'] + ':00Z';
-    console.log(dt)
+  private validateSelectedEvent(event: string | undefined): string | undefined {
+    return (['All', 'Alarm', 'Warning', 'Info'].includes(event || ''))
+           ? event
+           : undefined
+  }
+
+  private setFocusOfNotValidElement(used: boolean, value: any, element: any): boolean {
+    if (!used) {return false};
+    if (value === undefined) {
+      element.current?.focus();
+      return true
+    }
+    return false;
+  }
+
+  private fillIfUsed(result: any, used: boolean, name:string, value: any): void {
+    if (used) {
+      result[name] = value;
+    }
+  }
+
+  private getQuery(): ISearchQuery | undefined {
+    const dateFrom: number | undefined = this.validateDateTime(this.refFromDate.current?.value);
+    const dateTo  : number | undefined = this.validateDateTime(this.refToDate.current?.value);
+    const event   : string | undefined = this.validateSelectedEvent(this.refEvent.current?.value);
+    const useDate: boolean = this.state.useDataRangeInSearch;
+    const useEvent: boolean = this.state.useEventTypeInSearch;
+    if (this.setFocusOfNotValidElement(useDate, dateFrom, this.refFromDate)) { return undefined };
+    if (this.setFocusOfNotValidElement(useDate, dateTo  , this.refToDate  )) { return undefined };
+    if (this.setFocusOfNotValidElement(useEvent, event  , this.refEvent   )) { return undefined };
+    const res: ISearchQuery = {}
+    this.fillIfUsed(res, useDate,  'dateFrom', dateFrom);
+    this.fillIfUsed(res, useDate,  'dateTo'  , dateTo);
+    this.fillIfUsed(res, useEvent, 'event'   , event);
+    return res;
+  }
+
+  private exitHandler() {
+    const query: ISearchQuery | undefined = this.getQuery();
+    if (query !== undefined) {
+      this.props.onExitHandler(query);
+    }
   }
 
   render(){
@@ -85,7 +128,6 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           ref = {this.refFromDate}
           id='fromDate'
           className={'search InputFrom' + this.showIfUsed(this.state.useDataRangeInSearch)}
-          onChange={(e)=>this.chahgeDateTime(e)}
           />
         <label
           className={'search LabelTo' + this.showIfUsed(this.state.useDataRangeInSearch)}
@@ -113,7 +155,7 @@ export default class Search extends Component<ISearchProps, ISearchState> {
 
         <div className={'search EventPicker' + this.showIfUsed(this.state.useEventTypeInSearch)}>
           <label htmlFor="events-select">Choose an Event:</label>
-          <select id="events-select">
+          <select id="events-select" ref = {this.refEvent}>
             <option value="">--Please choose an Event--</option>
             <option value="All">All</option>
             <option value="Alarm">Alarms</option>
@@ -125,7 +167,7 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           className={'btn btn-primary btn-xs search Search'+
                      this.showIfUsed(this.state.useDataRangeInSearch ||
                                      this.state.useEventTypeInSearch)}
-          onClick={()=>this.props.onExitHandler(this.getQuery())}
+          onClick={()=>this.exitHandler()}
         >Search</button>
         <button
           className="btn btn-secondary btn-xs search Cancel"
