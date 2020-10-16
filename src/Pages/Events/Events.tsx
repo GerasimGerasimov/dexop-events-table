@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Modal from "../../components/HOC/Modal";
 import EventsTable from "../../components/table/EventsTable";
 import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode} from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
 import EventsHeaderMenu from "./menu/EventsHeaderMenu";
+import Search from "./search/search";
 
 interface IEventsProps{
 }
@@ -12,6 +14,7 @@ interface IEventsProps{
 interface IEventsState{
   query: IEventsQuery;
   respond: IEventsRespond;
+  showModal: boolean;
 }
 
 const TenItemsOnPage: number = 10;
@@ -37,7 +40,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         ItemsAfter: 0,
         ItemsInRespond: 0,
         Items: []
-      }
+      },
+      showModal: false
     }
   }
 
@@ -148,6 +152,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
   }
 
   private handlerToolMenu(name: string, status: boolean){
+    console.log(name);
+    this.setState({showModal: true})
     /*
     const handlers: {[handlerName: string]: any} = {
       'ZoomMinus' : this.onZoomMinus.bind(this),
@@ -160,30 +166,41 @@ export default class Events extends Component <IEventsProps,IEventsState> {
   }
 
   render() {
+    const modal = this.state.showModal
+    ? (
+      <Modal>
+        <Search></Search>
+      </Modal>
+    )
+    : null;
+    
     return (
-      <div className='flex-column'>
-        <EventsHeaderMenu
-            ToolMenuHandler = {this.handlerToolMenu.bind(this)}
-            isTougle = {false}
-          />
-        <div className='flex-all-client b1pxdgr'>
-          <EventsTable
-            items = {this.state.respond.Items}
-            DateSortDirectionIcon = {this.getDateSortDirectionIcon(this.state.query.SortMode?.DateTimeSortDirection)}
-            EventsSortModeIcon = {this.getEventSortModeIcon(this.state.query.SortMode?.EventsSortMode)}
-            changeDateSortModeHandler = {this.changeDateSortMode.bind(this)}
-            changeEventsSortModeHandler = {this.changeEventsSortMode.bind(this)}
-          />
+      <>
+        <div className='flex-column'>
+          <EventsHeaderMenu
+              ToolMenuHandler = {this.handlerToolMenu.bind(this)}
+              isTougle = {false}
+            />
+          <div className='flex-all-client b1pxdgr'>
+            <EventsTable
+              items = {this.state.respond.Items}
+              DateSortDirectionIcon = {this.getDateSortDirectionIcon(this.state.query.SortMode?.DateTimeSortDirection)}
+              EventsSortModeIcon = {this.getEventSortModeIcon(this.state.query.SortMode?.EventsSortMode)}
+              changeDateSortModeHandler = {this.changeDateSortMode.bind(this)}
+              changeEventsSortModeHandler = {this.changeEventsSortMode.bind(this)}
+            />
+          </div>
+            <Paginator
+              ItemsAfter = {this.state.respond.ItemsAfter}
+              ItemsBefore = {this.state.respond.ItemsBefore}
+              ItemsPortion = {TenItemsOnPage}
+              QueriedQuantity = {this.state.query.QueriedQuantity}
+              nextItemsHandler = {this.getPortionOfItems.bind(this)}
+              setNumberOfItemsOnPageHandler = {this.setNumberOfItemsOnPage.bind(this)}
+            />
         </div>
-          <Paginator
-            ItemsAfter = {this.state.respond.ItemsAfter}
-            ItemsBefore = {this.state.respond.ItemsBefore}
-            ItemsPortion = {TenItemsOnPage}
-            QueriedQuantity = {this.state.query.QueriedQuantity}
-            nextItemsHandler = {this.getPortionOfItems.bind(this)}
-            setNumberOfItemsOnPageHandler = {this.setNumberOfItemsOnPage.bind(this)}
-          />
-      </div>
+        {modal}
+      </>
     );
   }
 }
