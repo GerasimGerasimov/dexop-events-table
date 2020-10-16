@@ -102,7 +102,9 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           </select>
         </div>
         <button
-          className="btn btn-primary btn-xs search Search"
+          className={'btn btn-primary btn-xs search Search'+
+                     this.showIfUsed(this.state.useDataRangeInSearch ||
+                                     this.state.useEventTypeInSearch)}
           onClick={()=>this.props.onExitHandler(undefined)}
         >Search</button>
         <button
