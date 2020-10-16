@@ -210,8 +210,3 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     );
   }
 }
-
-/*
-          <button>Search</button>
-          <input type="datetime-local"/>
-*/
