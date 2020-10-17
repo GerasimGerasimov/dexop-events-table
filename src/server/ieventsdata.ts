@@ -5,6 +5,12 @@ export interface IEventItemDetails {
   todo: string;
 }
 
+export interface ISearchRangeQuery {
+  dateFrom?: number;
+  dateTo?: number;
+  event?: IEventSortMode;
+}
+
 export interface IEventItem {
   datetime: string;
   tag: string;
@@ -18,19 +24,10 @@ export enum ISortDirection {
 
 export enum IEventSortMode {
   All     = '',
-  Alarm   ='a',
+  Alarm   = 'a',
   Warning = 'w',
   Info    = 'i'
 }
-
-/*
-export const IEventSortMode = new Map ([
-  ['All',''],
-  ['Alarm', 'a'],
-  ['Warning', 'w'],
-  ['Info','i']
-])
-*/
 
 export interface IEventsSortMode {
   DateTimeSortDirection: ISortDirection;
@@ -48,6 +45,7 @@ export interface IEventsQuery {
   FromIndex: number;
   QueriedQuantity: number;
   Direction?: IEventQueryDirection;
+  Range?: ISearchRangeQuery;
 }
 
 export interface IEventsRespond {

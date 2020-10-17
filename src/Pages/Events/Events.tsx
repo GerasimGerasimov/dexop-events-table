@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Modal from "../../components/HOC/Modal";
 import EventsTable from "../../components/table/EventsTable";
-import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode} from "../../server/ieventsdata";
+import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISearchRangeQuery} from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
 import EventsHeaderMenu from "./menu/EventsHeaderMenu";
-import Search, { ISearchQuery } from "./search/search";
+import Search from "./search/search";
 
 interface IEventsProps{
 }
@@ -18,6 +18,7 @@ interface IEventsState{
 }
 
 const TenItemsOnPage: number = 10;
+const Day: number = 24*60*60*1000;
 
 export default class Events extends Component <IEventsProps,IEventsState> {
 
@@ -30,6 +31,12 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         SortMode: {
           DateTimeSortDirection: ISortDirection.Up,
           EventsSortMode:  IEventSortMode.All
+        },
+        Range:{
+          //чтобы вывести журнал за текущие сутки
+          dateFrom: new Date().getTime() - Day,
+          dateTo:   new Date().getTime(),
+          event:    IEventSortMode.All
         }
       },
       respond: {
@@ -163,7 +170,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     */
   }
 
-  private handlerSearchFormClose(result: ISearchQuery | undefined) {
+  private handlerSearchFormClose(range: ISearchRangeQuery | undefined) {
+    console.log(range)
     this.setState({showModal:false})
   }
 

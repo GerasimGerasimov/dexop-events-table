@@ -1,14 +1,9 @@
-import React, { Component, RefObject } from "react"
+import React, { Component} from "react"
+import { IEventSortMode, ISearchRangeQuery } from "../../../server/ieventsdata";
 import './search.css'
 
-export interface ISearchQuery {
-  dateFrom?: number;
-  dateTo?: number;
-  event?: string;
-}
-
 export interface ISearchFormCloseHandler {
-  (result: ISearchQuery | undefined): any;
+  (result: ISearchRangeQuery | undefined): any;
 }
 
 export interface ISearchProps {
@@ -58,10 +53,8 @@ export default class Search extends Component<ISearchProps, ISearchState> {
             : ms
   }
 
-  private validateSelectedEvent(event: string | undefined): string | undefined {
-    return (['All', 'Alarm', 'Warning', 'Info'].includes(event || ''))
-           ? event
-           : undefined
+  private validateSelectedEvent(event: string | undefined): IEventSortMode | undefined {
+    return IEventSortMode[(event || 'All') as keyof typeof IEventSortMode];
   }
 
   private setFocusOfNotValidElement(used: boolean, value: any, element: any): boolean {
@@ -79,16 +72,16 @@ export default class Search extends Component<ISearchProps, ISearchState> {
     }
   }
 
-  private getQuery(): ISearchQuery | undefined {
+  private getQuery(): ISearchRangeQuery | undefined {
     const dateFrom: number | undefined = this.validateDateTime(this.refFromDate.current?.value);
     const dateTo  : number | undefined = this.validateDateTime(this.refToDate.current?.value);
-    const event   : string | undefined = this.validateSelectedEvent(this.refEvent.current?.value);
+    const event   : IEventSortMode | undefined = this.validateSelectedEvent(this.refEvent.current?.value);
     const useDate: boolean = this.state.useDataRangeInSearch;
     const useEvent: boolean = this.state.useEventTypeInSearch;
     if (this.setFocusOfNotValidElement(useDate, dateFrom, this.refFromDate)) { return undefined };
     if (this.setFocusOfNotValidElement(useDate, dateTo  , this.refToDate  )) { return undefined };
     if (this.setFocusOfNotValidElement(useEvent, event  , this.refEvent   )) { return undefined };
-    const res: ISearchQuery = {}
+    const res: ISearchRangeQuery = {}
     this.fillIfUsed(res, useDate,  'dateFrom', dateFrom);
     this.fillIfUsed(res, useDate,  'dateTo'  , dateTo);
     this.fillIfUsed(res, useEvent, 'event'   , event);
@@ -96,7 +89,7 @@ export default class Search extends Component<ISearchProps, ISearchState> {
   }
 
   private exitHandler() {
-    const query: ISearchQuery | undefined = this.getQuery();
+    const query: ISearchRangeQuery | undefined = this.getQuery();
     if (query !== undefined) {
       this.props.onExitHandler(query);
     }
@@ -157,10 +150,9 @@ export default class Search extends Component<ISearchProps, ISearchState> {
           <label htmlFor="events-select">Choose an Event:</label>
           <select id="events-select" ref = {this.refEvent}>
             <option value="">--Please choose an Event--</option>
-            <option value="All">All</option>
-            <option value="Alarm">Alarms</option>
-            <option value="Warning">Warnings</option>
-            <option value="Info">Info</option>
+            { Object.keys(IEventSortMode).map((value)=>
+              <option key={value} value={value}>{value}</option>
+            )}
           </select>
         </div>
         <button
