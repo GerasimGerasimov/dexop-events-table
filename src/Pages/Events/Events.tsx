@@ -18,7 +18,7 @@ interface IEventsState{
 }
 
 const TenItemsOnPage: number = 10;
-const Day: number = 24*60*60*1000;
+const DaysAgo: number = 60*(24*60*60*1000);
 
 export default class Events extends Component <IEventsProps,IEventsState> {
 
@@ -34,7 +34,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         },
         Range:{
           //чтобы вывести журнал за текущие сутки
-          dateFrom: new Date().getTime() - Day,
+          dateFrom: new Date().getTime() - DaysAgo,
           dateTo:   new Date().getTime(),
           event:    IEventSortMode.All
         }

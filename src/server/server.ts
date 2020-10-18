@@ -78,48 +78,67 @@ export class TEventsModel {
     return res;
   }
 
-  private getSortedItems(Items: Array<IEventItem>, SortMode: IEventsSortMode): Array<IEventItem> {
-    const items:Array<IEventItem> = Items;
+  private getSortedItems(Items: Array<IEventItem>, query: IEventsQuery): Array<IEventItem> {
+    let items:Array<IEventItem> = Items;
+    const SortMode: IEventsSortMode = query.SortMode;
     //если не надо сортировать по типам событий, а просто все события
     //в хронологическом порядке
     if (SortMode.EventsSortMode === IEventSortMode.All) {
-      items.sort(sortByDate(SortMode.DateTimeSortDirection));
+      items.sort(sortByDate(SortMode.DateTimeSortDirection));//
     } else {
       //1) получаю от 1 до 3х (по типам событий) отсортированных по времени массивов
       const res:Map<string, Array<IEventItem>> = this.getSortedMap(Items, SortMode.DateTimeSortDirection);
+      const sequences = {
+        [IEventSortMode.Alarm]  : [IEventSortMode.Alarm,   IEventSortMode.Warning, IEventSortMode.Info],
+        [IEventSortMode.Warning]: [IEventSortMode.Warning, IEventSortMode.Alarm,   IEventSortMode.Info],
+        [IEventSortMode.Info]:    [IEventSortMode.Info,    IEventSortMode.Warning, IEventSortMode.Alarm]
+      }
       //2) Теперь надо собрать их в один массив в зависимости от типа события
-      if (SortMode.EventsSortMode === IEventSortMode.Alarm) {
-        let result: Array<IEventItem> = [];
-        return result.concat(
-          res.get(IEventSortMode.Alarm) || [],
-          res.get(IEventSortMode.Warning) || [],
-          res.get(IEventSortMode.Info) || []
-        )
-      }
-      if (SortMode.EventsSortMode === IEventSortMode.Warning) {
-        let result: Array<IEventItem> = [];
-        return result.concat(
-          res.get(IEventSortMode.Warning) || [],
-          res.get(IEventSortMode.Alarm) || [],
-          res.get(IEventSortMode.Info) || []
-        )
-      }
-      if (SortMode.EventsSortMode === IEventSortMode.Info) {
-        let result: Array<IEventItem> = [];
-        return result.concat(
-          res.get(IEventSortMode.Info) || [],
-          res.get(IEventSortMode.Warning) || [],
-          res.get(IEventSortMode.Alarm) || []
-        )
+      items = this.concatEventsArraysBy(res, sequences[SortMode.EventsSortMode])
+    }
+    items = this.filterByDataRange(items, query);
+    items = this.filterByEvent(items, query)
+    return items;
+  }
+
+  private concatEventsArraysBy(source: Map<string, Array<IEventItem>>, sequence:Array<IEventSortMode>): Array<IEventItem> {
+    let result: Array<IEventItem> = [];
+    sequence.forEach((mode)=>{
+      const src: Array<IEventItem> = source.get(mode) || [];
+      result = result.concat(src)
+    })
+    return result;
+  }
+
+  //Если указаны ограничения по времени в полях Range, то удалить все записи не входящие в диапазон
+  private filterByDataRange(source: Array<IEventItem>, query: IEventsQuery):Array<IEventItem> {
+    let res: Array<IEventItem> = source;
+    const {dateFrom, dateTo} = {... query.Range};
+    if ((dateFrom !== undefined) && (dateTo !== undefined)) {
+      res = source.filter((item)=>{
+        const itemDate: number = new Date(item.datetime).getTime();
+        return ((itemDate >= dateFrom) && (itemDate <= dateTo))
+      })
+    }
+    return res; 
+  }
+
+  //Если в Range есть НЕ All event то убрать все события кроме этого
+  private filterByEvent(source: Array<IEventItem>, query: IEventsQuery):Array<IEventItem> {
+    let res: Array<IEventItem> = source;
+    const {event} = {... query.Range};
+    if (event !== undefined) {
+      if (event !== IEventSortMode.All) {
+        res = source.filter(item => event === item.details.type)
       }
     }
-    return items;
+    return res; 
   }
 
   public getItems(query: IEventsQuery): IEventsRespond {
     const result: IEventsRespond = this.defaultEventRespond();
     const unSortedItems:Array<IEventItem> = this.Items;
-    const sortedItems: Array<IEventItem> = this.getSortedItems(unSortedItems, query.SortMode);
+    const sortedItems: Array<IEventItem> = this.getSortedItems(unSortedItems, query);
     const ItemsArray: Array<IEventItem> = sortedItems.slice(query.FromIndex, query.FromIndex+query.QueriedQuantity);
     result.Items = ItemsArray;
     result.ItemsBefore = query.FromIndex;
