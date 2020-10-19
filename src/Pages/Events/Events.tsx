@@ -21,7 +21,7 @@ interface IEventsState{
 const TenItemsOnPage: number = 10;
 const DaysAgo: number = 60*(24*60*60*1000);
 
-const DefaultRange = {
+const DefaultRange: ISearchRangeQuery = {
   dateFrom: new Date().getTime() - DaysAgo,
   dateTo:   new Date().getTime(),
   event:    IEventSortMode.All
@@ -218,6 +218,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
       <Modal classes='content-center'>
         <Search
           onExitHandler = {this.handlerFilterFormClose.bind(this)}
+          Range = {this.state.query.Range || DefaultRange}
         />
       </Modal>
     )

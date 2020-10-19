@@ -8,6 +8,7 @@ export interface ISearchFormCloseHandler {
 
 export interface ISearchProps {
   onExitHandler:ISearchFormCloseHandler;
+  Range: ISearchRangeQuery;
 }
 
 export interface ISearchState {
