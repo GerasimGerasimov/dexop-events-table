@@ -3,6 +3,12 @@ import { IEventItem, IEventSortMode, IEventsQuery, IEventsRespond, IEventsSortMo
 
 export const count = 10;
 
+const sequences = {
+  [IEventSortMode.Alarm]  : [IEventSortMode.Alarm,   IEventSortMode.Warning, IEventSortMode.Info],
+  [IEventSortMode.Warning]: [IEventSortMode.Warning, IEventSortMode.Alarm,   IEventSortMode.Info],
+  [IEventSortMode.Info]:    [IEventSortMode.Info,    IEventSortMode.Warning, IEventSortMode.Alarm]
+}
+
 interface IEventsModelClient {
   ID: string;
   SortMode: IEventsSortMode;//как были отсортировваны данные
@@ -88,11 +94,6 @@ export class TEventsModel {
     } else {
       //1) получаю от 1 до 3х (по типам событий) отсортированных по времени массивов
       const res:Map<string, Array<IEventItem>> = this.getSortedMap(Items, SortMode.DateTimeSortDirection);
-      const sequences = {
-        [IEventSortMode.Alarm]  : [IEventSortMode.Alarm,   IEventSortMode.Warning, IEventSortMode.Info],
-        [IEventSortMode.Warning]: [IEventSortMode.Warning, IEventSortMode.Alarm,   IEventSortMode.Info],
-        [IEventSortMode.Info]:    [IEventSortMode.Info,    IEventSortMode.Warning, IEventSortMode.Alarm]
-      }
       //2) Теперь надо собрать их в один массив в зависимости от типа события
       items = this.concatEventsArraysBy(res, sequences[SortMode.EventsSortMode])
     }

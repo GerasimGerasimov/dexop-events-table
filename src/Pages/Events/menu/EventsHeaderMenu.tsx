@@ -12,16 +12,27 @@ export interface IToolMenuProps {
 }
 
 export default class EventsHeaderMenu extends Component <IToolMenuProps,{}> {
-  private ToolMenu: Array<IToolButtonProps> = [
-    { name: 'Search', type:'TougleButton', icon:['fa-filter', 'fa-filter'],
-      isTougle: this.props.isTougle,
-      onClick:this.props.ToolMenuHandler}
-  ]
-    
+
+  //private ToolMenu: Array<IToolButtonProps> = [];
+
+  constructor(props: IToolMenuProps) {
+    super(props);
+    /*
+    this.ToolMenu = [
+      { name: 'Search', type:'TougleButton', icon:['fa-trash', 'fa-filter'],
+        isTougle: this.props.isTougle,
+        onClick:this.props.ToolMenuHandler}
+    ]*/
+  }
+
   render () {
     return (
       <div>
-        <ToolMenu elements = {this.ToolMenu}/>
+        <ToolMenu elements = {[
+            { name: 'Search', type:'TougleButton', icon:['fa-trash', 'fa-filter'],
+              isTougle: this.props.isTougle,
+              onClick:this.props.ToolMenuHandler}
+          ]}/>
       </div>
     )
   }

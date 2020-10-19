@@ -3,6 +3,7 @@ import './ToolMenu.css';
 import { ToolButton } from './buttons/ToolButton/ToolButton';
 import { TougleButton } from './buttons/touglebutton/TougleButton';
 import { IToolButtonProps } from './buttons/iToolButton';
+import { SelfTougledButton } from './buttons/SelfTougledButton/SelfTougledButton';
 
 
 export interface ITrandsMenuProps {
@@ -15,6 +16,11 @@ export default class ToolMenu extends Component<ITrandsMenuProps,{}> {
     const Types: {[type: string]: any} = {
       'TougleButton'  : () => {return (
                         <TougleButton
+                          {... prop}
+                          key = {key}
+                          />)},
+      'SelfTougledButton'  : () => {return (
+                        <SelfTougledButton
                           {... prop}
                           key = {key}
                           />)},

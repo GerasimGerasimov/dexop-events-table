@@ -1,19 +1,21 @@
-import React from 'react';
-import './TougleButton.css';
+import React, { useState } from 'react';
+import './SelfTougledButton.css';
 import { IToolButtonProps } from '../iToolButton';
 
-export const TougleButton = (props: IToolButtonProps) => {
+export const SelfTougledButton = (props: IToolButtonProps) => {
+    const [tougle, changeTougle] = useState(props.isTougle || false);
 
     const classes = [
         'MenuButton',
         'fa',
-        props.isTougle
+        tougle
         ? (`${props.icon[0]} toogled`)
         : props.icon[1],
     ]
 
     const click = () => {
-        props.onClick(props.name, props.isTougle)
+        changeTougle(!tougle);
+        props.onClick(props.name, tougle)
     }
 
     return (

@@ -15,6 +15,7 @@ interface IEventsState{
   query: IEventsQuery;
   respond: IEventsRespond;
   showModal: boolean;
+  filterEnable: boolean;
 }
 
 const TenItemsOnPage: number = 10;
@@ -49,7 +50,8 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         ItemsInRespond: 0,
         Items: []
       },
-      showModal: false
+      showModal: false,
+      filterEnable: false
     }
   }
 
@@ -167,17 +169,12 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     }))
   }
 
-  private setSearchRange(status: boolean) {
-    //status
-    //  true - включена фильтрация
-    //        Параметры Range заданы формой
-    //  false - выключена выключена фильтрация
-    //        При этом загрузить в Range параметры из DefaultRange
-    //        dateFrom: new Date().getTime() - DaysAgo,
-    //        dateTo:   new Date().getTime(),
-    //        event:    IEventSortMode.All
-    if (status) {
-      this.setRange(DefaultRange)
+  private tougleFilter(enabled: boolean) {
+    if (enabled) {
+      this.setState({
+        filterEnable: false
+      })
+      this.setRange(DefaultRange);
     } else {
       this.setState({showModal: true})
     }
@@ -185,18 +182,34 @@ export default class Events extends Component <IEventsProps,IEventsState> {
 
   private handlerToolMenu(name: string, status: boolean){
     const handlers: {[handlerName: string]: any} = {
-      'Search' : this.setSearchRange.bind(this),
+      'Search' : this.tougleFilter.bind(this),
       'default'   : ()=>{console.log(`${name} not found`)}
     }
     return (handlers[name] || handlers['default'])(status)
   }
 
-  private handlerSearchFormClose(range: ISearchRangeQuery | undefined) {
-    console.log(range);
+  private disableFilter(){
+    this.setState({
+      showModal:false,
+      filterEnable: false
+    })
+    this.setRange(DefaultRange);
+  }
+
+  private enableFilter(range: ISearchRangeQuery) {
     const query = {... this.state.query}
     query.Range = {... query.Range, ... range};
     this.setRange(query.Range);
-    this.setState({showModal:false})
+    this.setState({
+      showModal: false,
+      filterEnable: true
+    })
+  }
+
+  private handlerFilterFormClose(range: ISearchRangeQuery | undefined) {
+    (range)
+    ? this.enableFilter(range)
+    : this.disableFilter()
   }
 
   render() {
@@ -204,7 +217,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     ? (
       <Modal classes='content-center'>
         <Search
-          onExitHandler = {this.handlerSearchFormClose.bind(this)}
+          onExitHandler = {this.handlerFilterFormClose.bind(this)}
         />
       </Modal>
     )
@@ -215,7 +228,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
         <div className='flex-column'>
           <EventsHeaderMenu
               ToolMenuHandler = {this.handlerToolMenu.bind(this)}
-              isTougle = {false}
+              isTougle = {this.state.filterEnable}
             />
           <div className='flex-all-client b1pxdgr'>
             <EventsTable
