@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Modal from "../../components/HOC/Modal";
 import EventsTable from "../../components/table/EventsTable";
+import FilterSettings from "../../Forms/FilterSettings/FilterSettings";
 import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISearchRangeQuery} from "../../server/ieventsdata";
 import { EventsModel } from "../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
 import EventsHeaderMenu from "./menu/EventsHeaderMenu";
-import Search from "./search/search";
 
 interface IEventsProps{
 }
@@ -216,7 +216,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     const modal = this.state.showModal
     ? (
       <Modal classes='content-center'>
-        <Search
+        <FilterSettings
           onExitHandler = {this.handlerFilterFormClose.bind(this)}
           Range = {this.state.query.Range || DefaultRange}
         />

@@ -1,28 +1,28 @@
 import React, { Component} from "react"
-import { IEventSortMode, ISearchRangeQuery } from "../../../server/ieventsdata";
-import './search.css'
+import { IEventSortMode, ISearchRangeQuery } from "../../server/ieventsdata";
+import './FilterSettings.css'
 
-export interface ISearchFormCloseHandler {
+export interface IFilterSettingsCloseHandler {
   (result: ISearchRangeQuery | undefined): any;
 }
 
-export interface ISearchProps {
-  onExitHandler:ISearchFormCloseHandler;
+export interface IFilterSettingsProps {
+  onExitHandler:IFilterSettingsCloseHandler;
   Range: ISearchRangeQuery;
 }
 
-export interface ISearchState {
+export interface IFilterSettingsState {
  useDataRangeInSearch: boolean;
  useEventTypeInSearch: boolean;
 }
 
-export default class Search extends Component<ISearchProps, ISearchState> {
+export default class FilterSettings extends Component<IFilterSettingsProps, IFilterSettingsState> {
 
   private refFromDate = React.createRef<HTMLInputElement>();
   private refToDate   = React.createRef<HTMLInputElement>();
   private refEvent    = React.createRef<HTMLSelectElement>();
 
-  constructor (props: ISearchProps) {
+  constructor (props: IFilterSettingsProps) {
     super(props);
     this.state={
       useDataRangeInSearch: true,
