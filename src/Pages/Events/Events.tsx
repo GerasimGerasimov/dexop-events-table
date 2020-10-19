@@ -20,6 +20,12 @@ interface IEventsState{
 const TenItemsOnPage: number = 10;
 const DaysAgo: number = 60*(24*60*60*1000);
 
+const DefaultRange = {
+  dateFrom: new Date().getTime() - DaysAgo,
+  dateTo:   new Date().getTime(),
+  event:    IEventSortMode.All
+}
+
 export default class Events extends Component <IEventsProps,IEventsState> {
 
   constructor(props: IEventsProps){
@@ -32,12 +38,7 @@ export default class Events extends Component <IEventsProps,IEventsState> {
           DateTimeSortDirection: ISortDirection.Up,
           EventsSortMode:  IEventSortMode.All
         },
-        Range:{
-          //чтобы вывести журнал за текущие сутки
-          dateFrom: new Date().getTime() - DaysAgo,
-          dateTo:   new Date().getTime(),
-          event:    IEventSortMode.All
-        }
+        Range:{... DefaultRange}
       },
       respond: {
         ClientID: '',
@@ -158,20 +159,43 @@ export default class Events extends Component <IEventsProps,IEventsState> {
     return '⋮' //All
   }
 
+  private setRange(range: ISearchRangeQuery){
+    const query = {... this.state.query}
+    query.Range = range;
+    this.setState({query},(()=>{
+      this.getData();
+    }))
+  }
+
+  private setSearchRange(status: boolean) {
+    //status
+    //  true - включена фильтрация
+    //        Параметры Range заданы формой
+    //  false - выключена выключена фильтрация
+    //        При этом загрузить в Range параметры из DefaultRange
+    //        dateFrom: new Date().getTime() - DaysAgo,
+    //        dateTo:   new Date().getTime(),
+    //        event:    IEventSortMode.All
+    if (status) {
+      this.setRange(DefaultRange)
+    } else {
+      this.setState({showModal: true})
+    }
+  }
+
   private handlerToolMenu(name: string, status: boolean){
-    console.log(name);
-    this.setState({showModal: true})
-    /*
     const handlers: {[handlerName: string]: any} = {
-      'Search' : this.onSearch.bind(this),
+      'Search' : this.setSearchRange.bind(this),
       'default'   : ()=>{console.log(`${name} not found`)}
     }
     return (handlers[name] || handlers['default'])(status)
-    */
   }
 
   private handlerSearchFormClose(range: ISearchRangeQuery | undefined) {
-    console.log(range)
+    console.log(range);
+    const query = {... this.state.query}
+    query.Range = {... query.Range, ... range};
+    this.setRange(query.Range);
     this.setState({showModal:false})
   }
 
