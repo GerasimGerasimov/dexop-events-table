@@ -1,4 +1,6 @@
 import React, { Component} from "react"
+import { getLocalDateFormValue, toDatetimeLocal } from "../../helpers/timeutils";
+import { getKeyOfEnumByValue } from "../../helpers/utils";
 import { IEventSortMode, ISearchRangeQuery } from "../../server/ieventsdata";
 import './FilterSettings.css'
 
@@ -28,6 +30,14 @@ export default class FilterSettings extends Component<IFilterSettingsProps, IFil
       useDataRangeInSearch: true,
       useEventTypeInSearch: true
     }
+  }
+ 
+  componentDidMount(){
+    this.refFromDate.current!.value = getLocalDateFormValue(this.props.Range.dateFrom);
+    this.refToDate.current!.value   = getLocalDateFormValue(this.props.Range.dateTo);
+    let value: IEventSortMode = this.props.Range.event || IEventSortMode.All;
+    let key = getKeyOfEnumByValue( IEventSortMode, value, 'All');
+    this.refEvent.current!.value = key
   }
 
   private changeUseDateInSearch() {
@@ -150,7 +160,6 @@ export default class FilterSettings extends Component<IFilterSettingsProps, IFil
         <div className={'search EventPicker' + this.showIfUsed(this.state.useEventTypeInSearch)}>
           <label htmlFor="events-select">Choose an Event:</label>
           <select id="events-select" ref = {this.refEvent}>
-            <option value="">--Please choose an Event--</option>
             { Object.keys(IEventSortMode).map((value)=>
               <option key={value} value={value}>{value}</option>
             )}

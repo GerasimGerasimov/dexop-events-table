@@ -34,3 +34,11 @@ export function strToXML(source: string, key: any): any {
     var content: any = parser.parseFromString(source, key);
     return content;//да, документ получил. Можно парсить    
 }
+
+export function getKeyOfEnumByValue( Enum:any, Value: any, def?: string): string {
+    let res: string = def || '';
+    for ( const [key, value] of Object.entries(Enum)){
+      if (value === Value) return key
+    }
+    return res;
+  }
