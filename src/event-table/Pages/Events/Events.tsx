@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Modal from "../../components/HOC/Modal";
+import Modal from "../../../components/HOC/Modal";
 import EventsTable from "../../components/table/EventsTable";
 import FilterSettings from "../../Forms/FilterSettings/FilterSettings";
-import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISearchRangeQuery} from "../../server/ieventsdata";
-import { EventsModel } from "../../server/server";
+import { IEventQueryDirection, ISortDirection, IEventsQuery, IEventsRespond, IEventSortMode, ISearchRangeQuery} from "../../../server/ieventsdata";
+import { EventsModel } from "../../../server/server";
 import Paginator from "./components/paginator/paginator";
 import './Events.css'
 import EventsHeaderMenu from "./menu/EventsHeaderMenu";

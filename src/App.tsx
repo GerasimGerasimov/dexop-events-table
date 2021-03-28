@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Events from './Pages/Events/Events';
+import Events from './event-table/Pages/Events/Events';
 
 export default class App extends Component<{},{}> {
 

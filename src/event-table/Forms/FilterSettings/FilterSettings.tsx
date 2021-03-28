@@ -1,7 +1,7 @@
 import React, { Component} from "react"
-import { getLocalDateFormValue, toDatetimeLocal } from "../../helpers/timeutils";
+import { getLocalDateFormValue} from "../../helpers/timeutils";
 import { getKeyOfEnumByValue } from "../../helpers/utils";
-import { IEventSortMode, ISearchRangeQuery } from "../../server/ieventsdata";
+import { IEventSortMode, ISearchRangeQuery } from "../../../server/ieventsdata";
 import './FilterSettings.css'
 
 export interface IFilterSettingsCloseHandler {
@@ -109,7 +109,7 @@ export default class FilterSettings extends Component<IFilterSettingsProps, IFil
   render(){
     return (
       <div className='search block grid-container'>
-        <h3 className='search Header'>Search</h3>
+        <h3 className='search Header'>Filter Settings</h3>
         <div className='search DateConditionPicker'>
           <div className='custom-control custom-checkbox'>
             <input  type="checkbox"
